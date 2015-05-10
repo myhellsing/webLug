@@ -1,0 +1,11 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+
+# Idea Files #
+.idea
+webLug.iml
+out
+target
