@@ -2,13 +2,20 @@
 <html>
 
 <head>
+    <script type="text/javascript" src="canvasjs.min.js"></script>
+    <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.js"></script>
     <script type="text/javascript">
 	window.onload = function () {
+	$.when($.getJSON("/income"), $.getJSON("/outcome")).done(function(income, outcome) {
+	    income = income[0].reverse();
+	    outcome = outcome[0].reverse();
+
 		var chart = new CanvasJS.Chart("chartContainer",
 		{
 
 			title:{
-				text: "Site Traffic",
+				text: "Balance",
 				fontSize: 30
 			},
                         animationEnabled: true,
@@ -16,9 +23,9 @@
 
 				gridColor: "Silver",
 				tickColor: "silver",
-				valueFormatString: "DD/MMM"
+				valueFormatString: "DD/MMM/YYYY"
 
-			},                        
+			},
                         toolTip:{
                           shared:true
                         },
@@ -32,50 +39,59 @@
 				horizontalAlign: "right"
 			},
 			data: [
-			{        
+			{
 				type: "line",
 				showInLegend: true,
 				lineThickness: 2,
-				name: "Visits",
+				name: "Income",
 				markerType: "square",
 				color: "#F08080",
-				dataPoints: [
-				{ x: new Date(2010,0,3), y: 650 },
-				{ x: new Date(2010,0,5), y: 700 },
-				{ x: new Date(2010,0,7), y: 710 },
-				{ x: new Date(2010,0,9), y: 658 },
-				{ x: new Date(2010,0,11), y: 734 },
-				{ x: new Date(2010,0,13), y: 963 },
-				{ x: new Date(2010,0,15), y: 847 },
-				{ x: new Date(2010,0,17), y: 853 },
-				{ x: new Date(2010,0,19), y: 869 },
-				{ x: new Date(2010,0,21), y: 943 },
-				{ x: new Date(2010,0,23), y: 970 }
-				]
+				dataPoints: income.map(function(item) {
+				    return {
+				        x: new Date(item.date),
+				        y: item.value
+				    };
+				})
 			},
-			{        
+			{
 				type: "line",
 				showInLegend: true,
-				name: "Unique Visits",
+				name: "Outcome",
 				color: "#20B2AA",
 				lineThickness: 2,
 
-				dataPoints: [
-				{ x: new Date(2010,0,3), y: 510 },
-				{ x: new Date(2010,0,5), y: 560 },
-				{ x: new Date(2010,0,7), y: 540 },
-				{ x: new Date(2010,0,9), y: 558 },
-				{ x: new Date(2010,0,11), y: 544 },
-				{ x: new Date(2010,0,13), y: 693 },
-				{ x: new Date(2010,0,15), y: 657 },
-				{ x: new Date(2010,0,17), y: 663 },
-				{ x: new Date(2010,0,19), y: 639 },
-				{ x: new Date(2010,0,21), y: 673 },
-				{ x: new Date(2010,0,23), y: 660 }
-				]
+				dataPoints: outcome.map(function(item) {
+				    return {
+				        x: new Date(item.date),
+				        y: item.value
+				    };
+				})
+			},
+			{
+				type: "line",
+				showInLegend: true,
+				name: "Balance",
+				color: "#bebebe",
+				lineThickness: 2,
+
+				dataPoints: outcome.map(function(outcomeItem, index) {
+					var item = income[index];
+				    return {
+				        x: new Date(item.date),
+				        y: item.value - outcomeItem.value
+				    };
+				}).reduce(function(acc, item) {
+					var prev = acc[acc.length - 1];
+
+					acc.push({
+						x: item.x,
+						y: item.y + (prev ? prev.y : 0)
+					})
+					return acc;
+				}, [])
 			}
 
-			
+
 			],
           legend:{
             cursor:"pointer",
@@ -91,14 +107,16 @@
           }
 		});
 
-chart.render();
+        chart.render();
+
+	})
 }
 </script>
-    <script type="text/javascript" src="/assets/script/canvasjs.min.js"></script>
 </head>
 <body>
 <div id="chartContainer" style="height: 300px; width: 100%;">
 </div>
+123
 </body>
 </html>
 
