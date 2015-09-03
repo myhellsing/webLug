@@ -1,11 +1,7 @@
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
-import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +17,8 @@ public class driverToGoogleData {
     // url for data
     URL SPREADSHEET_FEED_URL = null;
 
+
+
     public driverToGoogleData(String feed_url) {
         init();
         try {
@@ -31,22 +29,12 @@ public class driverToGoogleData {
         }
     }
 
-    public void init(){
 
-        if (service == null) service =   new SpreadsheetService("MySpreadsheetIntegration-v1");
-        setPassword();
-    }
 
-    public  void setPassword() {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("security.txt"));
-            String USERNAME = br.readLine();
-            String PASSWORD = br.readLine();
-            service.setUserCredentials(USERNAME, PASSWORD);
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public void init()  {
+        GoogleSpreadAuth gss= new GoogleSpreadAuth();
+        if (service == null) try {
+            service = gss.getSpreadsheetServiceService();
         } catch (IOException e) {
             e.printStackTrace();
         }
