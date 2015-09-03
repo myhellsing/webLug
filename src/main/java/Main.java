@@ -17,11 +17,13 @@ import static spark.SparkBase.staticFileLocation;
 public class Main {
     static Gson gson = new Gson();
     public static ArrayList<Transaction> transactions = null;
+    public static ArrayList<BalanceByMonth> balanceByMonths=null;
 
     public static void loadTransactions(){
         driverToGoogleData rd = new driverToGoogleData("https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE");
         try {
             transactions = rd.getTransactions();
+            balanceByMonths=rd.balanceByMonths;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServiceException e) {
@@ -65,9 +67,18 @@ public class Main {
 
         }, gson::toJson);
 
+        get("/balance",(req,res) -> {
+            if (transactions == null) loadTransactions();
+            return balanceByMonths;
+
+        }, gson::toJson);
 
         get("/tryHtml", (req,res) ->{
             return new String(Files.readAllBytes(Paths.get("views/test.html")));
+
+        });
+        get("/balanceHtml", (req,res) ->{
+            return new String(Files.readAllBytes(Paths.get("views/balance.html")));
 
         });
     }

@@ -17,6 +17,8 @@ public class driverToGoogleData {
     // url for data
     URL SPREADSHEET_FEED_URL = null;
 
+    public ArrayList<BalanceByMonth> balanceByMonths=null;
+
 
 
     public driverToGoogleData(String feed_url) {
@@ -38,6 +40,7 @@ public class driverToGoogleData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        balanceByMonths=new ArrayList<>();
     }
 
 
@@ -114,9 +117,14 @@ public class driverToGoogleData {
             Date date = getDate(worksheet.getTitle().getPlainText());
             System.out.println(date);
             // Iterate through each row, printing its cell values.
+            double balance =0;
             for (ListEntry row : listFeed.getEntries()) {
                 // если это строки с фиксацией текущего состояния на начало месяца - то пропускаем их
-                if (needSkip(row.getCustomElements().getValue("название"))) continue;
+                if (needSkip(row.getCustomElements().getValue("название"))) {
+                    balance+=getBalance(row);
+                    continue;
+                }
+
                 // парсим данные - определяем, что относится к доходу, а что к тратам
                 String name = "";
                 double sum = 0;
@@ -148,9 +156,26 @@ public class driverToGoogleData {
                 if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date));
 
             }
+            balanceByMonths.add(new BalanceByMonth(date,balance));
         }
 
         return transactions;
+    }
+
+    private double getBalance(ListEntry row) {
+        double balance=0;
+        for (String tag : row.getCustomElements().getTags()) {
+            // System.out.print(row.getCustomElements().getValue(tag) + "\t" +"tags:"+tag+"\t");
+            switch (tag) {
+                case "приход":
+                    if (row.getCustomElements().getValue(tag) != null)
+                        balance = Double.parseDouble(row.getCustomElements().getValue(tag));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return balance;
     }
 
     /**
