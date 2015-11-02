@@ -1,3 +1,5 @@
+import luggage.Transaction;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
