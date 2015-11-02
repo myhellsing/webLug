@@ -1,3 +1,5 @@
+package luggage;
+
 import java.util.Date;
 
 /**
