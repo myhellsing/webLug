@@ -18,10 +18,10 @@ public class GraphData {
         ArrayList<GraphPoint> out = new ArrayList<>();
         Calendar calendarCurrentMonth = null;
         double currentOutAtMonth = 0;
-        for (int i=0;i<transactions.size();i++){
-            if (transactions.get(i).sum*what <=0 ){
+        for (Transaction t:transactions){
+            if (t.sum*what <=0 ){
                 Calendar calendarOfOutCome = Calendar.getInstance();
-                calendarOfOutCome.setTime(transactions.get(i).date);
+                calendarOfOutCome.setTime(t.date);
                 if (calendarCurrentMonth == null) calendarCurrentMonth = Calendar.getInstance();
                 if (calendarCurrentMonth.get(Calendar.MONTH) != calendarOfOutCome.get(Calendar.MONTH) ) {
                     out.add(new GraphPoint(calendarCurrentMonth.getTime(), currentOutAtMonth*what*(-1)));
@@ -30,7 +30,7 @@ public class GraphData {
                     currentOutAtMonth=0;
                     System.out.println(calendarCurrentMonth.get(Calendar.MONTH) + " " +calendarCurrentMonth.get(Calendar.YEAR));
                 }
-                currentOutAtMonth+=transactions.get(i).sum;
+                currentOutAtMonth+=t.sum;
             }
 
         }

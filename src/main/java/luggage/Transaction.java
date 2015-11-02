@@ -1,11 +1,13 @@
 package luggage;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by myhellsing on 11/05/15.
  */
-public class Transaction {
+public class Transaction implements Serializable{
 
     public String name;
     public Double sum;
@@ -17,6 +19,12 @@ public class Transaction {
         this.sum = sum;
         this.category = category;
         this.date = date;
+    }
+
+    public int getMonth(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.date);
+        return calendar.get(Calendar.MONTH);
     }
 
     public String toString(){

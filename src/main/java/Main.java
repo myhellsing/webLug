@@ -3,13 +3,11 @@
  * Created by myhellsing on 11/05/15.
  */
 
-import GDriveData.driverToGoogleData;
-import com.google.gdata.util.ServiceException;
 import com.google.gson.Gson;
+import luggage.AnalysisCalc;
 import luggage.BalanceByMonth;
 import luggage.Transaction;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,27 +20,14 @@ public class Main {
     public static ArrayList<Transaction> transactions = null;
     public static ArrayList<BalanceByMonth> balanceByMonths=null;
 
-    public static void loadTransactions(){
-        driverToGoogleData rd = new driverToGoogleData("https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE");
-        try {
-            transactions = rd.getTransactions();
-            balanceByMonths=rd.balanceByMonths;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ArrayList<Transaction> getTransactions(){
-        if (transactions == null){
-            loadTransactions();
-        }
-        return transactions;
+    private static void loadTransactions() {
+        AnalysisCalc analysisCalc = new AnalysisCalc();
+        transactions = analysisCalc.getTransactions();
     }
 
     public static void main(String[] args) {
         gson = new Gson();
+
         staticFileLocation("/public"); // Static files
         get("/hello", (req, res) -> "Hello World");
 
@@ -85,4 +70,6 @@ public class Main {
 
         });
     }
+
+
 }

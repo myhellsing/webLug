@@ -82,6 +82,8 @@ public class driverToGoogleData {
     public List<WorksheetEntry> getAllWorksheets() {
         //   Получили объект файла Трат
         WorksheetFeed worksheetFeed = null;
+
+
         try {
             SpreadsheetEntry spreadsheet = service.getEntry(SPREADSHEET_FEED_URL,SpreadsheetEntry.class);
             // Get the first worksheet of the first spreadsheet.  Получили все листы в файле Трат
@@ -106,7 +108,6 @@ public class driverToGoogleData {
         if (name.trim().equals("наличка")) return true;
         return false;
     }
-
 
 
     public ArrayList<Transaction> getTransactions() throws IOException, ServiceException {
