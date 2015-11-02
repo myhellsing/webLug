@@ -3,6 +3,8 @@ package GDriveData;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
+import luggage.BalanceByMonth;
+import luggage.Transaction;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
