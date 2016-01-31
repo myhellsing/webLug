@@ -9,6 +9,6 @@
 webLug.iml
 out
 target
-
+data/*
 
 security.txt

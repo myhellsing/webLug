@@ -4,8 +4,7 @@ import GDriveData.driverToGoogleData;
 import com.google.gdata.util.ServiceException;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Created by myhellsing on 03/11/15.
@@ -41,7 +40,9 @@ public class AnalysisCalc {
     public  boolean getFromLocalCache(){
 
         try {
-            FileInputStream fileIn = new FileInputStream(localCache);
+            File f = new File(localCache);
+            if (!f.exists()) return false;
+            FileInputStream fileIn = new FileInputStream(f);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             transactions = (ArrayList<Transaction>) in.readObject();
             in.close();
@@ -109,9 +110,79 @@ public class AnalysisCalc {
 
     }
 
+    // сумма по названиям трат
+
+    public void sumByCategory(LinkedList<Transaction> trans){
+        HashMap<String,Double> hm= new HashMap<>();
+        for (Transaction t :trans){
+            if (hm.containsKey(t.name)){
+                Double sum = hm.get(t.name)+t.sum;
+                hm.put(t.name,sum);
+            }
+            else
+                hm.put(t.name,t.sum);
+        }
+        for (String s:hm.keySet()){
+            System.out.println(s + " " + Math.abs(hm.get(s)));
+        }
+    }
+    public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
+        LinkedList<Transaction> sortedTransactions =new LinkedList<>();
+        System.out.println("Searching for " + lt.get(0));
+        for (Transaction t:transactions){
+            if (t.categoryFrom(lt)){
+                sortedTransactions.add(t);
+                System.out.println(t.getYear()+": "+t);
+            }
+        }
+        System.out.println("Found "+sortedTransactions.size());
+        return sortedTransactions;
+    }
+
+    public LinkedList<Transaction> getTransactionsByYear(int year, LinkedList<Transaction> trans){
+        LinkedList<Transaction> sortedTransactions = new LinkedList<>();
+        for (Transaction t:trans){
+            if (t.getYear() == year)
+                sortedTransactions.add(t);
+        }
+        return sortedTransactions;
+    }
+
+    public void printMoney(int currentYear, long allmoney){
+        System.out.println(currentYear+": "+(-1)*allmoney+" by month "+((-1)*allmoney/12) );
+    }
+
+    public void calcAuto(){
+        List<String> aliases = new LinkedList<>();
+        aliases.add("машина");
+        aliases.add("авто");
+
+        long allmoney =0;
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (Transaction t:getTransactionsByCategoryAliases(aliases)){
+            if (currentYear!=t.getYear()){
+                printMoney(currentYear, allmoney);
+                currentYear=t.getYear();
+                allmoney=0;
+
+            }
+            else{
+                if (!t.name.contains("каско"))
+                    allmoney+=t.sum;
+
+            }
+
+        }
+        printMoney(currentYear,(allmoney));
+
+        //2015 по статьям
+        sumByCategory(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
+    }
+
     public void run(){
         loadTransactions();
-        calcEveryMonthtransaction();
+       // calcEveryMonthtransaction();
+        calcAuto();
     }
 
 }

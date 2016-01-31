@@ -3,6 +3,7 @@ package luggage;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by myhellsing on 11/05/15.
@@ -25,6 +26,21 @@ public class Transaction implements Serializable{
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.date);
         return calendar.get(Calendar.MONTH);
+    }
+
+    public int getYear(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.date);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public boolean categoryFrom(List<String> lt){
+        for (String s:lt){
+            if (category !=null && category.contains(s.trim()))
+                return true;
+        }
+        return false;
+
     }
 
     public String toString(){

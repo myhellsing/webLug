@@ -115,6 +115,7 @@ public class driverToGoogleData {
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
         // список таблиц по месяцам
         List<WorksheetEntry> worksheets = getAllWorksheets();
+        System.out.println("Количество Листов: " + worksheets.size());
         // пройдемся по всем месяцам
         for (WorksheetEntry worksheet:worksheets) {
             // Получили список строк
@@ -123,6 +124,7 @@ public class driverToGoogleData {
             System.out.println(date);
             // Iterate through each row, printing its cell values.
             double balance =0;
+            System.out.println("Количество Строк в Листе "+worksheet.getTitle().getPlainText()+": "+listFeed.getEntries().size());
             for (ListEntry row : listFeed.getEntries()) {
                 // если это строки с фиксацией текущего состояния на начало месяца - то пропускаем их
                 if (needSkip(row.getCustomElements().getValue("название"))) {
