@@ -11,7 +11,7 @@ out
 target
 
 # my files #
-data/*
+data/
 data/transactions.txt
 
 security.txt
