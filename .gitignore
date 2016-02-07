@@ -9,6 +9,9 @@
 webLug.iml
 out
 target
+
+# my files #
 data/*
+data/transactions.txt
 
 security.txt
