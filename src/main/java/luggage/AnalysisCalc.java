@@ -25,15 +25,15 @@ public class AnalysisCalc {
 
     public void loadTransactions(){
         if (getFromLocalCache()) return;
-        driverToGoogleData rd = new driverToGoogleData("https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE");
+        driverToGoogleData rd = new driverToGoogleData();
         try {
             transactions = rd.getTransactions();
-            balanceByMonths=rd.balanceByMonths;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+        balanceByMonths=rd.balanceByMonths;
         saveLocalCache();
     }
 

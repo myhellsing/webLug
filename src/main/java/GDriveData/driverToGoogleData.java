@@ -24,6 +24,12 @@ public class driverToGoogleData {
 
     public ArrayList<BalanceByMonth> balanceByMonths=null;
 
+    public static String defaultUrl = "https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE";
+
+
+    public driverToGoogleData(){
+        this(defaultUrl);
+    }
 
 
     public driverToGoogleData(String feed_url) {

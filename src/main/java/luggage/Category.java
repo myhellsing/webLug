@@ -1,5 +1,7 @@
 package luggage;
 
+import org.bson.Document;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,5 +14,9 @@ public class Category implements Serializable {
 
     public Category(String name) {
         this.name = name;
+    }
+
+    public Document toBSON(){
+         return new Document().append("name",name).append("aliases",aliases);
     }
 }

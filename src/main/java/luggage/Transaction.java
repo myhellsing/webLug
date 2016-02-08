@@ -1,5 +1,7 @@
 package luggage;
 
+import org.bson.Document;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,5 +47,8 @@ public class Transaction implements Serializable{
 
     public String toString(){
         return this.name+"\t"+this.sum+"\t"+this.category;
+    }
+    public Document toBSON(){
+       return new Document().append("name",name).append("sum",sum).append("date",date).append("category",category.toBSON());
     }
 }
