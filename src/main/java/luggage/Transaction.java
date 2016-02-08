@@ -12,10 +12,10 @@ public class Transaction implements Serializable{
 
     public String name;
     public Double sum;
-    public String category;
+    public Category category;
     public Date date;
 
-    public Transaction(String name, double sum, String category, Date date) {
+    public Transaction(String name, double sum, Category category, Date date) {
         this.name = name;
         this.sum = sum;
         this.category = category;
@@ -36,7 +36,7 @@ public class Transaction implements Serializable{
 
     public boolean categoryFrom(List<String> lt){
         for (String s:lt){
-            if (category !=null && category.contains(s.trim()))
+            if (category !=null && category.name.contains(s.trim()))
                 return true;
         }
         return false;

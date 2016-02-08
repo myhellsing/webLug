@@ -4,6 +4,7 @@ import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
 import luggage.BalanceByMonth;
+import luggage.Category;
 import luggage.Transaction;
 
 import java.io.IOException;
@@ -135,7 +136,7 @@ public class driverToGoogleData {
                 // парсим данные - определяем, что относится к доходу, а что к тратам
                 String name = "";
                 double sum = 0;
-                String category = "";
+                Category category = null;
                 for (String tag : row.getCustomElements().getTags()) {
                     // System.out.print(row.getCustomElements().getValue(tag) + "\t" +"tags:"+tag+"\t");
                     switch (tag) {
@@ -145,14 +146,14 @@ public class driverToGoogleData {
                         case "приход":
                             if (row.getCustomElements().getValue(tag) != null)
                                 sum = Double.parseDouble(row.getCustomElements().getValue(tag));
-                            category="приход";
+                            category= new Category("приход");
                             break;
                         case "расход":
                             if (sum == 0 && row.getCustomElements().getValue(tag) != null)
                                 sum = (-1) * Double.parseDouble(row.getCustomElements().getValue(tag));
                             break;
                         case "категория":
-                            category = row.getCustomElements().getValue(tag);
+                            category = new Category(row.getCustomElements().getValue(tag));
                             break;
                         default:
                             break;

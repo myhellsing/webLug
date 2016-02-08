@@ -112,7 +112,7 @@ public class AnalysisCalc {
 
     // сумма по названиям трат
 
-    public void sumByCategory(LinkedList<Transaction> trans){
+    public void sumByNameOfTransactions(LinkedList<Transaction> trans){
         HashMap<String,Double> hm= new HashMap<>();
         for (Transaction t :trans){
             if (hm.containsKey(t.name)){
@@ -176,7 +176,7 @@ public class AnalysisCalc {
         printMoney(currentYear,(allmoney));
 
         //2015 по статьям
-        sumByCategory(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
+        sumByNameOfTransactions(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
     }
 
     public void run(){
