@@ -5,8 +5,10 @@ import com.mongodb.client.MongoDatabase;
 import luggage.AnalysisCalc;
 import luggage.Transaction;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by myhellsing on 09/02/16.
@@ -26,10 +28,23 @@ public class SaveToMongo {
         AnalysisCalc analysisCalc = new AnalysisCalc();
         ArrayList<Transaction> transactions = analysisCalc.getTransactions();
         ArrayList<Document> transDocs =new ArrayList<>();
+        HashMap<String,ObjectId> categories = new HashMap<>();
+        ArrayList<Document> categoryDocs =new ArrayList<>();
         for (Transaction t :transactions){
-            transDocs.add(t.toBSON());
+            ObjectId category_id= new ObjectId();
+             if (categories.containsKey(t.category.name) ){
+                 category_id = categories.get(t.category.name);
+             }
+            else {
+                 categories.put(t.category.name, category_id);
+                 categoryDocs.add(t.category.createBSON().append("_id",category_id));
+             }
+            transDocs.add(t.createBSON().append("category_id", category_id));
         }
+        database.getCollection("Transactions").drop();
         database.getCollection("Transactions").insertMany(transDocs);
+        database.getCollection("Category").drop();
+        database.getCollection("Category").insertMany(categoryDocs);
     }
 
 
