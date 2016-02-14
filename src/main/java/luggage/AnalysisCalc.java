@@ -2,6 +2,7 @@ package luggage;
 
 import GDriveData.driverToGoogleData;
 import com.google.gdata.util.ServiceException;
+import luggage.data.Transaction;
 
 import java.io.*;
 import java.util.*;
@@ -178,6 +179,7 @@ public class AnalysisCalc {
         //2015 по статьям
         sumByNameOfTransactions(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
     }
+
 
     public void run(){
         loadTransactions();

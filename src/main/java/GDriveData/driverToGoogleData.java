@@ -4,8 +4,8 @@ import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
 import luggage.BalanceByMonth;
-import luggage.Category;
-import luggage.Transaction;
+import luggage.data.Category;
+import luggage.data.Transaction;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -152,7 +152,7 @@ public class driverToGoogleData {
                         case "приход":
                             if (row.getCustomElements().getValue(tag) != null)
                                 sum = Double.parseDouble(row.getCustomElements().getValue(tag));
-                            category= new Category("приход");
+                                category= new Category("приход");
                             break;
                         case "расход":
                             if (sum == 0 && row.getCustomElements().getValue(tag) != null)
@@ -165,7 +165,7 @@ public class driverToGoogleData {
                             break;
                     }
                 }
-
+                if (category == null) category = new Category("unknown");
                 // если это не пустая строка в данных
                 if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date));
 

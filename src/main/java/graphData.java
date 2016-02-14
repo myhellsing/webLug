@@ -1,4 +1,4 @@
-import luggage.Transaction;
+import luggage.data.Transaction;
 
 import java.util.ArrayList;
 import java.util.Calendar;

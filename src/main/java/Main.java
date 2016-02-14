@@ -6,7 +6,7 @@
 import com.google.gson.Gson;
 import luggage.AnalysisCalc;
 import luggage.BalanceByMonth;
-import luggage.Transaction;
+import luggage.data.Transaction;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
