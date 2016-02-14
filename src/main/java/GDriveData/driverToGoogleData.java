@@ -165,7 +165,7 @@ public class driverToGoogleData {
                             break;
                     }
                 }
-                if (category == null) category = new Category("unknown");
+                if (category == null) category = new Category(Category.UNKNOWN);
                 // если это не пустая строка в данных
                 if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date));
 

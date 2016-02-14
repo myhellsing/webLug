@@ -2,7 +2,6 @@ package luggage;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import luggage.data.Category;
 import luggage.data.CategoryCodecProvider;
@@ -13,6 +12,8 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * Created by myhellsing on 09/02/16.
@@ -65,35 +66,46 @@ public class SaveToMongo {
 
     }
 
-    public void printCategories(){
 
-        MongoCollection<Category>  categoriesCollection = db.getCollection(Category.COLLECTION_NAME,Category.class);
-        ArrayList<Category> categories = categoriesCollection.find().into(new ArrayList<Category>());
-        for (Category c:categories){
-            System.out.println(c.name);
+    public void findCategoryAliases(){
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        db.getCollection(Transaction.COLLECTION_NAME,Transaction.class).find().into(transactions);
+        HashMap<String,TreeSet<String>> hm = new HashMap<>();
+        for (Transaction t: transactions){
+            if (t.category.name.compareTo(Category.UNKNOWN) == 0) continue;
+            if (hm.containsKey(t.name)) {
+                if (!hm.get(t.name).contains(t.category.name)){
+                    hm.get(t.name).add(t.category.name);
+                }
+            }
+            else{
+                TreeSet<String> aliases = new TreeSet<>();
+                aliases.add(t.category.name);
+                hm.put(t.name, aliases);
+            }
         }
-
+        for (String s:hm.keySet()){
+            if (hm.get(s).size()>1) {
+                System.out.print("name: " + s);
+                System.out.print("\t\t");
+                for (String a : hm.get(s)) {
+                    System.out.print(a + "\t");
+                }
+                System.out.println();
+            }
+        }
 
     }
 
-    public void printTransactions(){
-        MongoCollection<Transaction>  transCollection = db.getCollection(Transaction.COLLECTION_NAME,Transaction.class);
-        ArrayList<Transaction> transactions = transCollection.find().into(new ArrayList<Transaction>());
-        for (Transaction t:transactions){
-            System.out.println(t.name);
-        }
-
-    }
 
 
 
     public void run(){
         init();
       //  addUser("Darya");
-        saveTransactions();
-      //  printCategories();
+     //   saveTransactions();
+        findCategoryAliases();
 
-       printTransactions();
 
     }
     public static void main(String[] args) {
