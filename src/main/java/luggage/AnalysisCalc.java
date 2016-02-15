@@ -14,6 +14,7 @@ public class AnalysisCalc {
     public  ArrayList<Transaction> transactions = null;
     public  ArrayList<BalanceByMonth> balanceByMonths=null;
     public  String localCache="data/transactions.txt";
+    public  String balanceCache="data/balance.txt";
 
     public static void main(String[] args) {
         new AnalysisCalc().run();
@@ -48,6 +49,14 @@ public class AnalysisCalc {
             transactions = (ArrayList<Transaction>) in.readObject();
             in.close();
             fileIn.close();
+
+            File balance = new File(balanceCache);
+            if (!balance.exists()) return false;
+            FileInputStream fileInBalance = new FileInputStream(balance);
+            ObjectInputStream inBalance = new ObjectInputStream(fileInBalance);
+            balanceByMonths = (ArrayList<BalanceByMonth>) inBalance.readObject();
+            inBalance.close();
+            fileInBalance.close();
             return true;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -61,11 +70,19 @@ public class AnalysisCalc {
 
     public  void saveLocalCache (){
         try {
+            //кешируем траты
             FileOutputStream fileOut = new FileOutputStream(localCache);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(transactions);
             out.close();
             fileOut.close();
+
+            //кешируем баланс по месяцам
+            FileOutputStream balanceFile = new FileOutputStream(balanceCache);
+            ObjectOutputStream outBalance = new ObjectOutputStream(balanceFile);
+            outBalance.writeObject(balanceByMonths);
+            outBalance.close();
+            balanceFile.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

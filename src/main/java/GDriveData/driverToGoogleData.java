@@ -113,6 +113,7 @@ public class driverToGoogleData {
         if (name.trim().equals("на спец. счете")) return true;
         if (name.trim().equals("баланс на карте")) return true;
         if (name.trim().equals("наличка")) return true;
+        if (name.trim().equals("остаток на карте")) return true;
         return false;
     }
 
@@ -124,20 +125,23 @@ public class driverToGoogleData {
         List<WorksheetEntry> worksheets = getAllWorksheets();
         System.out.println("Количество Листов: " + worksheets.size());
         // пройдемся по всем месяцам
+        double lastBalance = 0;// баланс по результатам предыдущего месяца
         for (WorksheetEntry worksheet:worksheets) {
             // Получили список строк
             ListFeed listFeed = service.getFeed(worksheet.getListFeedUrl(), ListFeed.class);
             Date date = getDate(worksheet.getTitle().getPlainText());
             System.out.println(date);
             // Iterate through each row, printing its cell values.
-            double balance =0;
+            double balanceAtBeginningMonth =0;
             System.out.println("Количество Строк в Листе "+worksheet.getTitle().getPlainText()+": "+listFeed.getEntries().size());
+            double balance =0;
             for (ListEntry row : listFeed.getEntries()) {
                 // если это строки с фиксацией текущего состояния на начало месяца - то пропускаем их
                 if (needSkip(row.getCustomElements().getValue("название"))) {
-                    balance+=getBalance(row);
+                    balanceAtBeginningMonth+=getBalance(row); // считаем баланс на начало месяца
                     continue;
                 }
+
 
                 // парсим данные - определяем, что относится к доходу, а что к тратам
                 String name = "";
@@ -168,9 +172,19 @@ public class driverToGoogleData {
                 if (category == null) category = new Category(Category.UNKNOWN);
                 // если это не пустая строка в данных
                 if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date));
-
+                balance+=sum;
             }
-            balanceByMonths.add(new BalanceByMonth(date,balance));
+            if (Math.abs(balance+balanceAtBeginningMonth-lastBalance)>0) { // если баланс предыдущего месяца меньше, чем у нас денег на счету
+                //значит мы забыли что-то вписать в траты или доходы
+                Transaction t =new Transaction("не учтено",(balance+balanceAtBeginningMonth)-lastBalance,new Category("не фиксировано"),date);
+                System.out.println(t.getMonth()+"."+t.getYear()+": "+t.sum+" "+lastBalance+" "+(balance+balanceAtBeginningMonth));
+                // если это не текущий месяц,то добавим корректировку
+                if ((t.getYear() !=Calendar.getInstance().get(Calendar.YEAR) && t.getMonth()!=Calendar.getInstance().get(Calendar.MONTH))  ) {
+                    transactions.add(t);
+                }
+            }
+            lastBalance=balanceAtBeginningMonth;
+            balanceByMonths.add(new BalanceByMonth(date,balanceAtBeginningMonth));
         }
 
         return transactions;

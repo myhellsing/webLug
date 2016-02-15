@@ -23,6 +23,7 @@ public class Main {
     private static void loadTransactions() {
         AnalysisCalc analysisCalc = new AnalysisCalc();
         transactions = analysisCalc.getTransactions();
+        balanceByMonths=analysisCalc.balanceByMonths;
     }
 
     public static void main(String[] args) {

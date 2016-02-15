@@ -7,9 +7,10 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.js"></script>
     <script type="text/javascript">
 	window.onload = function () {
-	$.when($.getJSON("/income"), $.getJSON("/outcome")).done(function(income, outcome) {
+	$.when($.getJSON("/income"), $.getJSON("/outcome"),$.getJSON("/balance")).done(function(income, outcome, balance) {
 	    income = income[0].reverse();
 	    outcome = outcome[0].reverse();
+	    balance = balance[0].reverse();
 
 		var chart = new CanvasJS.Chart("chartContainer",
 		{
@@ -74,21 +75,12 @@
 				color: "#bebebe",
 				lineThickness: 2,
 
-				dataPoints: outcome.map(function(outcomeItem, index) {
-					var item = income[index];
+				dataPoints: balance.map(function(item) {
 				    return {
 				        x: new Date(item.date),
-				        y: item.value - outcomeItem.value
+				        y: item.balance
 				    };
-				}).reduce(function(acc, item) {
-					var prev = acc[acc.length - 1];
-
-					acc.push({
-						x: item.x,
-						y: item.y + (prev ? prev.y : 0)
-					})
-					return acc;
-				}, [])
+				})
 			}
 
 
