@@ -63,6 +63,7 @@ public class driverToGoogleData {
 
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
+        calendar.set(Calendar.DATE,2);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.YEAR, year);
         return calendar.getTime();

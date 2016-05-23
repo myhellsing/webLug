@@ -25,6 +25,11 @@ public class AnalysisCalc {
         return transactions;
     }
 
+    public ArrayList<BalanceByMonth> getBalanceByMonths() {
+        if (balanceByMonths ==null) loadTransactions();
+        return balanceByMonths;
+    }
+
     public void loadTransactions(){
         if (getFromLocalCache()) return;
         driverToGoogleData rd = new driverToGoogleData();
@@ -203,5 +208,6 @@ public class AnalysisCalc {
        // calcEveryMonthtransaction();
         calcAuto();
     }
+
 
 }

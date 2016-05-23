@@ -49,9 +49,13 @@ public class SaveToMongo {
     public void saveTransactions()  {
         AnalysisCalc analysisCalc = new AnalysisCalc();
         ArrayList<Transaction> transactions = analysisCalc.getTransactions();
-       db.getCollection(Transaction.COLLECTION_NAME,Transaction.class).insertMany(transactions);
+        db.getCollection(Transaction.COLLECTION_NAME,Transaction.class).insertMany(transactions);
 
+        ArrayList<BalanceByMonth> balanceByMonths= analysisCalc.getBalanceByMonths();
+      //  db.getCollection(Transaction.COLLECTION_NAME).find()
     }
+
+
 
 
 
@@ -103,8 +107,8 @@ public class SaveToMongo {
     public void run(){
         init();
       //  addUser("Darya");
-     //   saveTransactions();
-        findCategoryAliases();
+       saveTransactions();
+     //   findCategoryAliases();
 
 
     }
