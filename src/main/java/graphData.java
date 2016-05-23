@@ -14,14 +14,14 @@ public class GraphData {
         this.transactions  = transactions;
     }
 
-    public ArrayList<GraphPoint> come(int what){
+    public ArrayList<GraphPoint> come(String type){
         ArrayList<GraphPoint> out = new ArrayList<>();
         int lastMonth = Calendar.getInstance().get(Calendar.MONTH);
         double currentOutAtMonth = 0;
         for (Transaction t:transactions){
-            if (t.sum*what <=0 ){
+            if (t.type.equals(type) ){
                 if ( lastMonth != t.getMonth()){
-                    out.add(new GraphPoint(t.date, currentOutAtMonth*what*(-1)));
+                    out.add(new GraphPoint(t.date, currentOutAtMonth));
                     lastMonth=t.getMonth();
                     currentOutAtMonth=0;
                 }
@@ -34,10 +34,10 @@ public class GraphData {
     };
 
     public ArrayList<GraphPoint> outCome(){
-        return come(1);
+        return come(Transaction.INCOME);
     };
     public ArrayList<GraphPoint> inCome(){
-        return come(-1);
+        return come(Transaction.OUTCOME);
     };
 
 }

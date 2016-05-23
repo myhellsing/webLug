@@ -147,6 +147,7 @@ public class driverToGoogleData {
                 // парсим данные - определяем, что относится к доходу, а что к тратам
                 String name = "";
                 double sum = 0;
+                String type="";
                 Category category = null;
                 for (String tag : row.getCustomElements().getTags()) {
                     // System.out.print(row.getCustomElements().getValue(tag) + "\t" +"tags:"+tag+"\t");
@@ -158,10 +159,12 @@ public class driverToGoogleData {
                             if (row.getCustomElements().getValue(tag) != null)
                                 sum = Double.parseDouble(row.getCustomElements().getValue(tag));
                                 category= new Category("приход");
+                            type=Transaction.INCOME;
                             break;
                         case "расход":
                             if (sum == 0 && row.getCustomElements().getValue(tag) != null)
-                                sum = (-1) * Double.parseDouble(row.getCustomElements().getValue(tag));
+                                sum =  Double.parseDouble(row.getCustomElements().getValue(tag));
+                                type=Transaction.OUTCOME;
                             break;
                         case "категория":
                             category = new Category(row.getCustomElements().getValue(tag));
@@ -172,12 +175,12 @@ public class driverToGoogleData {
                 }
                 if (category == null) category = new Category(Category.UNKNOWN);
                 // если это не пустая строка в данных
-                if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date));
+                if (name != null && !name.equals("")) transactions.add(new Transaction(name, sum, category, date, type));
                 balance+=sum;
             }
             if (Math.abs(balance+balanceAtBeginningMonth-lastBalance)>0) { // если баланс предыдущего месяца меньше, чем у нас денег на счету
                 //значит мы забыли что-то вписать в траты или доходы
-                Transaction t =new Transaction("не учтено",(balance+balanceAtBeginningMonth)-lastBalance,new Category("не фиксировано"),date);
+                Transaction t =new Transaction("не учтено",(balance+balanceAtBeginningMonth)-lastBalance,new Category("не фиксировано"),date,Transaction.OUTCOME);
                 System.out.println(t.getMonth()+"."+t.getYear()+": "+t.sum+" "+lastBalance+" "+(balance+balanceAtBeginningMonth));
                 // если это не текущий месяц,то добавим корректировку
                 if ((t.getYear() !=Calendar.getInstance().get(Calendar.YEAR) && t.getMonth()!=Calendar.getInstance().get(Calendar.MONTH))  ) {
