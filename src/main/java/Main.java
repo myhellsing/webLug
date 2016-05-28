@@ -4,13 +4,19 @@
  */
 
 import com.google.gson.Gson;
+import com.mitchellbosecke.pebble.loader.FileLoader;
+import com.mitchellbosecke.pebble.loader.Loader;
 import luggage.AnalysisCalc;
 import luggage.BalanceByMonth;
 import luggage.data.Transaction;
+import spark.ModelAndView;
+import spark.template.pebble.PebbleTemplateEngine;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.get;
 import static spark.SparkBase.staticFileLocation;
@@ -30,7 +36,16 @@ public class Main {
         gson = new Gson();
 
         staticFileLocation("/public"); // Static files
-        get("/hello", (req, res) -> "Hello World");
+
+        Loader loader = new FileLoader();
+        loader.setPrefix("views/");
+
+        get("/hello", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("message", "Hello World!");
+
+            return new ModelAndView(attributes, "hello.pebble");
+        }, new PebbleTemplateEngine(loader));
 
         get("/load", (req,res) -> {
             loadTransactions();
