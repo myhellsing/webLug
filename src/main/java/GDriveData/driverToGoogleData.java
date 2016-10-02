@@ -20,26 +20,22 @@ public class driverToGoogleData {
     // service for connection to Google Drive
     public static SpreadsheetService service = null;
     // url for data
-    URL SPREADSHEET_FEED_URL = null;
+ //   URL SPREADSHEET_FEED_URL = null;
 
     public ArrayList<BalanceByMonth> balanceByMonths=null;
 
-    public static String defaultUrl = "https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE";
+    public static String[] defaultUrl = {"https://spreadsheets.google.com/feeds/spreadsheets/0Aoa5WkgCFdrudEhzcnE0bU83QksteENZS3puSTZJRUE",
+            "https://spreadsheets.google.com/feeds/spreadsheets/1ypwMnuc1NP5cnjtSWEafp-XofXn0tWkc4mkIFNNO39Q"};
 
 
-    public driverToGoogleData(){
-        this(defaultUrl);
-    }
-
-
-    public driverToGoogleData(String feed_url) {
+    public driverToGoogleData() {
         init();
-        try {
-            SPREADSHEET_FEED_URL = new URL(feed_url);
-        } catch (MalformedURLException e) {
-            System.out.println("SPREADSHEET_FEED_URL may be is not correct "+ e.getMessage() );
-            e.printStackTrace();
-        }
+//        try {
+//            SPREADSHEET_FEED_URL = new URL(feed_url);
+//        } catch (MalformedURLException e) {
+//            System.out.println("SPREADSHEET_FEED_URL may be is not correct "+ e.getMessage() );
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -87,22 +83,34 @@ public class driverToGoogleData {
         return 0;
     }
 
-    public List<WorksheetEntry> getAllWorksheets() {
-        //   Получили объект файла Трат
-        WorksheetFeed worksheetFeed = null;
-
-
+    public URL getSPREADSHEET_FEED_URL(String feed_url){
         try {
-            SpreadsheetEntry spreadsheet = service.getEntry(SPREADSHEET_FEED_URL,SpreadsheetEntry.class);
-            // Get the first worksheet of the first spreadsheet.  Получили все листы в файле Трат
-            worksheetFeed = service.getFeed(
-                    spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
+            return new URL(feed_url);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return worksheetFeed.getEntries();
+        return null;
+    }
+
+    public List<WorksheetEntry> getAllWorksheets() {
+        //объединяем записи со всех документов
+        List<WorksheetEntry> result = new LinkedList<>();
+        //   Получили объект файла Трат
+        WorksheetFeed worksheetFeed = null;
+        for (String url:defaultUrl) {
+            try {
+                SpreadsheetEntry spreadsheet = service.getEntry(getSPREADSHEET_FEED_URL(url), SpreadsheetEntry.class);
+                // Get the first worksheet of the first spreadsheet.  Получили все листы в файле Трат
+                worksheetFeed = service.getFeed(
+                        spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServiceException e) {
+                e.printStackTrace();
+            }
+            result.addAll(worksheetFeed.getEntries());
+        }
+        return result;
     }
 
 
