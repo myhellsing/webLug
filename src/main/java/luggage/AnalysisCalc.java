@@ -172,7 +172,7 @@ public class AnalysisCalc {
     }
 
     public void printMoney(int currentYear, long allmoney){
-        System.out.println(currentYear+": "+(-1)*allmoney+" by month "+((-1)*allmoney/12) );
+        System.out.println(currentYear+": "+allmoney+" by month "+(allmoney/12) );
     }
 
     public void calcAuto(){
@@ -200,6 +200,7 @@ public class AnalysisCalc {
 
         //2015 по статьям
         sumByNameOfTransactions(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
+        sumByNameOfTransactions(getTransactionsByYear(2016, getTransactionsByCategoryAliases(aliases)));
     }
 
 
