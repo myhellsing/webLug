@@ -15,6 +15,7 @@ public class AnalysisCalc {
     public  ArrayList<BalanceByMonth> balanceByMonths=null;
     public  String localCache="data/transactions.txt";
     public  String balanceCache="data/balance.txt";
+    public Boolean quietMode =true;
 
     public static void main(String[] args) {
         new AnalysisCalc().run();
@@ -35,6 +36,7 @@ public class AnalysisCalc {
         driverToGoogleData rd = new driverToGoogleData();
         try {
             transactions = rd.getTransactions();
+            Collections.sort(transactions);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServiceException e) {
@@ -151,14 +153,14 @@ public class AnalysisCalc {
     }
     public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
         LinkedList<Transaction> sortedTransactions =new LinkedList<>();
-        System.out.println("Searching for " + lt.get(0));
+        if (!quietMode) System.out.println("Searching for " + lt.get(0));
         for (Transaction t:transactions){
             if (t.categoryFrom(lt)){
                 sortedTransactions.add(t);
-                System.out.println(t.getYear()+": "+t);
+                if (!quietMode) System.out.println(t.getYear()+": "+t);
             }
         }
-        System.out.println("Found "+sortedTransactions.size());
+        if (!quietMode) System.out.println("Found "+sortedTransactions.size());
         return sortedTransactions;
     }
 
@@ -199,7 +201,9 @@ public class AnalysisCalc {
         printMoney(currentYear,(allmoney));
 
         //2015 по статьям
+        System.out.println("2015");
         sumByNameOfTransactions(getTransactionsByYear(2015, getTransactionsByCategoryAliases(aliases)));
+        System.out.println("2016");
         sumByNameOfTransactions(getTransactionsByYear(2016, getTransactionsByCategoryAliases(aliases)));
     }
 
