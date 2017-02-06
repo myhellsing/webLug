@@ -2,47 +2,44 @@ package luggage;
 
 import GDriveData.driverToGoogleData;
 import com.google.gdata.util.ServiceException;
-import luggage.data.Transaction;
+import luggage.data.Category;
+import luggage.data.MonthHistory;
 
 import java.io.*;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * Created by myhellsing on 03/11/15.
  */
 public class AnalysisCalc {
-    public  ArrayList<Transaction> transactions = null;
-    public  ArrayList<BalanceByMonth> balanceByMonths=null;
+
+    public ArrayList<MonthHistory> monthHistories;
     public  String localCache="data/transactions.txt";
-    public  String balanceCache="data/balance.txt";
     public Boolean quietMode =true;
+    public SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
 
     public static void main(String[] args) {
         new AnalysisCalc().run();
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        if (transactions == null) loadTransactions();
-        return transactions;
+    public ArrayList<MonthHistory> getMonthHistories() {
+        if (monthHistories == null) loadMonthHistories();
+        return monthHistories;
     }
 
-    public ArrayList<BalanceByMonth> getBalanceByMonths() {
-        if (balanceByMonths ==null) loadTransactions();
-        return balanceByMonths;
-    }
-
-    public void loadTransactions(){
+    public void loadMonthHistories(){
         if (getFromLocalCache()) return;
         driverToGoogleData rd = new driverToGoogleData();
         try {
-            transactions = rd.getTransactions();
-            Collections.sort(transactions);
+            monthHistories = rd.getMonthHistories();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        balanceByMonths=rd.balanceByMonths;
         saveLocalCache();
     }
 
@@ -53,17 +50,10 @@ public class AnalysisCalc {
             if (!f.exists()) return false;
             FileInputStream fileIn = new FileInputStream(f);
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            transactions = (ArrayList<Transaction>) in.readObject();
+            monthHistories = (ArrayList<MonthHistory>) in.readObject();
             in.close();
             fileIn.close();
 
-            File balance = new File(balanceCache);
-            if (!balance.exists()) return false;
-            FileInputStream fileInBalance = new FileInputStream(balance);
-            ObjectInputStream inBalance = new ObjectInputStream(fileInBalance);
-            balanceByMonths = (ArrayList<BalanceByMonth>) inBalance.readObject();
-            inBalance.close();
-            fileInBalance.close();
             return true;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -80,16 +70,9 @@ public class AnalysisCalc {
             //кешируем траты
             FileOutputStream fileOut = new FileOutputStream(localCache);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(transactions);
+            out.writeObject(monthHistories);
             out.close();
             fileOut.close();
-
-            //кешируем баланс по месяцам
-            FileOutputStream balanceFile = new FileOutputStream(balanceCache);
-            ObjectOutputStream outBalance = new ObjectOutputStream(balanceFile);
-            outBalance.writeObject(balanceByMonths);
-            outBalance.close();
-            balanceFile.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -98,44 +81,40 @@ public class AnalysisCalc {
         }
     }
 
-
+    /**
+     *  Список ежемесячных трат
+     */
     public void calcEveryMonthtransaction(){
-        TreeSet<String> nameOfTransactions = new TreeSet<>();
-        for (Transaction t : transactions){
-            if (!nameOfTransactions.contains(t.name)) nameOfTransactions.add(t.name);
+        TreeSet<Category> categories = new TreeSet<>();
+        HashMap<Category,Double> answer= new HashMap<>();
+        for (MonthHistory m : monthHistories){
+            if (m.getSumByCategory()!= null){
+                categories.addAll(m.getSumByCategory().keySet());
+            }
         }
-        ArrayList<String> answer = new ArrayList<>();
-        for (String name:nameOfTransactions){
+        for (Category c:categories){
             boolean wasIt = true;
-            boolean wasItInMonth =  (transactions.get(6).name.compareTo(name) ==0 ) ? true:false;
-            for (int i=7;i<transactions.size();i++){
-
-                wasItInMonth = wasItInMonth || ((transactions.get(i).name.compareTo(name) ==0 ) ? true:false);
-                if (transactions.get(i-1).getMonth() != transactions.get(i).getMonth()){
-                    if (wasItInMonth) {
-
-                        wasItInMonth= false;
-                    }
-                    else {
-                        wasIt = false;
-                    //    continue;
-                    }
+            double sum = 0;
+            for (MonthHistory m :monthHistories){
+                if (!m.getSumByCategory().containsKey(c)) {
+                    wasIt = false;
+                    break;
                 }
+                sum+=m.getSumByCategory().get(c);
             }
+
             if (wasIt){
-                answer.add(name);
+                answer.put(c, sum);
             }
-            wasIt=true;
         }
         System.out.println("Категории, которые встречаются в каждом месяце");
-        for (String n:answer){
-            System.out.println(n);
+        for (Category c:answer.keySet()){
+            System.out.println(c.name+"\t\n"+answer.get(c));
         }
-
 
     }
 
-    // сумма по названиям трат
+ /*   // сумма по названиям трат
 
     public void sumByNameOfTransactions(LinkedList<Transaction> trans){
         HashMap<String,Double> hm= new HashMap<>();
@@ -151,6 +130,8 @@ public class AnalysisCalc {
             System.out.println(s + " " + Math.abs(hm.get(s)));
         }
     }
+
+
     public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
         LinkedList<Transaction> sortedTransactions =new LinkedList<>();
         if (!quietMode) System.out.println("Searching for " + lt.get(0));
@@ -206,12 +187,29 @@ public class AnalysisCalc {
         System.out.println("2016");
         sumByNameOfTransactions(getTransactionsByYear(2016, getTransactionsByCategoryAliases(aliases)));
     }
+*/
 
+    public void printMonthSummary(){
+        double prewBalance = 0;
+        System.out.println("Дата\tБаланс на начало\tПриход\tРасход\tПотери");
+        for (MonthHistory m:monthHistories){
+
+            System.out.println(dateFormat.format(m.date)+
+                            "\t"+m.balanceAtBegin+
+                            "\t"+m.getCurrentBalance()+
+                            "\t"+m.getSummaryIncome()+
+                            "\t"+m.getSummaryOutcome()+
+                            "\t"+(Math.abs(prewBalance-m.balanceAtBegin))
+            );
+            prewBalance = m.getCurrentBalance();
+        }
+    }
 
     public void run(){
-        loadTransactions();
-       // calcEveryMonthtransaction();
-        calcAuto();
+        loadMonthHistories();
+        printMonthSummary();
+      //  calcEveryMonthtransaction();
+     //   calcAuto();
     }
 
 

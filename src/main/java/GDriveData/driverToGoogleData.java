@@ -143,7 +143,7 @@ public class driverToGoogleData {
         for (ListEntry row : listFeed.getEntries()) {
             // если это строки с фиксацией текущего состояния на начало месяца - то пропускаем их
             if (isForBalanceAtBeginning(row.getCustomElements().getValue("название"))) {
-                monthHistory.BalanceBegin+=getBalance(row); // считаем баланс на начало месяца
+                monthHistory.balanceAtBegin +=getBalance(row); // считаем баланс на начало месяца
                 continue;
             }
 
@@ -184,7 +184,7 @@ public class driverToGoogleData {
             if (name != null && !name.equals("")) monthHistory.transactions.add(new Transaction(name, sum, category, date, type));
         }
         // если баланс предыдущего месяца меньше, чем у нас денег на счету
-        if (Math.abs(monthHistory.getCurrentBalance()-lastBalance)>0) {
+/*        if (Math.abs(monthHistory.getCurrentBalance()-lastBalance)>0) {
             //значит мы забыли что-то вписать в траты или доходы
             Transaction t =new Transaction("не учтено",monthHistory.getCurrentBalance()-lastBalance,new Category("не фиксировано"),date,Transaction.TransactionType.OUTCOME);
             System.out.println(t.getMonth()+"."+t.getYear()+": "+t.sum+" "+lastBalance+" "+monthHistory.getCurrentBalance());
@@ -192,7 +192,7 @@ public class driverToGoogleData {
             if ((t.getYear() !=Calendar.getInstance().get(Calendar.YEAR) && t.getMonth()!=Calendar.getInstance().get(Calendar.MONTH))  ) {
                 monthHistory.transactions.add(t);
             }
-        }
+        }*/
         return monthHistory;
     };
 
