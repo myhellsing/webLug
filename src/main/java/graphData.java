@@ -10,7 +10,7 @@ public class graphData {
 
     public ArrayList<Transaction> transactions = null;
 
-    public GraphData(ArrayList<Transaction> transactions) {
+    public graphData(ArrayList<Transaction> transactions) {
         this.transactions  = transactions;
     }
 
