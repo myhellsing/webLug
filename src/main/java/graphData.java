@@ -6,7 +6,7 @@ import java.util.Calendar;
 /**
  * Created by myhellsing on 25/05/15.
  */
-public class GraphData {
+public class graphData {
 
     public ArrayList<Transaction> transactions = null;
 
