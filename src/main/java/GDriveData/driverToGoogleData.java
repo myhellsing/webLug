@@ -30,12 +30,6 @@ public class driverToGoogleData {
 
     public driverToGoogleData() {
         init();
-//        try {
-//            SPREADSHEET_FEED_URL = new URL(feed_url);
-//        } catch (MalformedURLException e) {
-//            System.out.println("SPREADSHEET_FEED_URL may be is not correct "+ e.getMessage() );
-//            e.printStackTrace();
-//        }
     }
 
 

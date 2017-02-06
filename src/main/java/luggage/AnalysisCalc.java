@@ -155,7 +155,7 @@ public class AnalysisCalc {
         LinkedList<Transaction> sortedTransactions =new LinkedList<>();
         if (!quietMode) System.out.println("Searching for " + lt.get(0));
         for (Transaction t:transactions){
-            if (t.categoryFrom(lt)){
+            if (t.isCategoryFrom(lt)){
                 sortedTransactions.add(t);
                 if (!quietMode) System.out.println(t.getYear()+": "+t);
             }
