@@ -43,6 +43,10 @@ public class AnalysisCalc {
         saveLocalCache();
     }
 
+    /**
+     * Достаем данные из локального файла, путь к которому указан в localCache
+     * @return
+     */
     public  boolean getFromLocalCache(){
 
         try {
@@ -65,6 +69,9 @@ public class AnalysisCalc {
         return false;
     }
 
+    /**
+     * Сохраняем данные в локальный файл по пути, указанному в localCache
+     */
     public  void saveLocalCache (){
         try {
             //кешируем траты
@@ -114,9 +121,10 @@ public class AnalysisCalc {
 
     }
 
- /*   // сумма по названиям трат
 
-    public void sumByNameOfTransactions(LinkedList<Transaction> trans){
+ /*
+  // сумма по названиям трат
+    public void summaryByNameOfTransactions(LinkedList<Transaction> trans){
         HashMap<String,Double> hm= new HashMap<>();
         for (Transaction t :trans){
             if (hm.containsKey(t.name)){
@@ -194,12 +202,13 @@ public class AnalysisCalc {
         System.out.println("Дата\tБаланс на начало\tПриход\tРасход\tПотери");
         for (MonthHistory m:monthHistories){
 
-            System.out.println(dateFormat.format(m.date)+
-                            "\t"+m.balanceAtBegin+
-                            "\t"+m.getCurrentBalance()+
-                            "\t"+m.getSummaryIncome()+
-                            "\t"+m.getSummaryOutcome()+
-                            "\t"+(Math.abs(prewBalance-m.balanceAtBegin))
+            System.out.printf("%s \t %10.0f \t %10.0f \t %10.0f \t %10.0f \t %10.0f \n",
+                    dateFormat.format(m.date),
+                    m.balanceAtBegin,
+                    m.getCurrentBalance(),
+                    m.getSummaryIncome(),
+                    m.getSummaryOutcome(),
+                    (Math.abs(prewBalance - m.balanceAtBegin))
             );
             prewBalance = m.getCurrentBalance();
         }

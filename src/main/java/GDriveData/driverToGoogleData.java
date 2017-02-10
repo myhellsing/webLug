@@ -216,7 +216,7 @@ public class driverToGoogleData {
             monthHistories.add(monthHistory);
             lastBalance=monthHistory.getCurrentBalance();
         }
-
+        Collections.sort(monthHistories);
         return monthHistories;
     }
 

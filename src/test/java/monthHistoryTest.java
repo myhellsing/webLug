@@ -22,7 +22,6 @@ public class monthHistoryTest {
     public void loadMontHistorySeptember2016(){
         AnalysisCalc analysisCalc = new AnalysisCalc();
         monthHistories = analysisCalc.getMonthHistories();
-        Collections.sort(monthHistories);
         for (MonthHistory m:monthHistories){
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(m.date);
