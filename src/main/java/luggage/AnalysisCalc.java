@@ -19,7 +19,7 @@ public class AnalysisCalc {
     public ArrayList<MonthHistory> monthHistories;
     public  String localCache="data/transactions.txt";
     public Boolean quietMode =true;
-    public SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
 
     public static void main(String[] args) {
         new AnalysisCalc().run();
@@ -91,9 +91,9 @@ public class AnalysisCalc {
     /**
      *  Список ежемесячных трат
      */
-    public void calcEveryMonthtransaction(){
+    public HashMap<Category,Double> calcEveryMonthCategories(ArrayList<MonthHistory> monthHistories){
         TreeSet<Category> categories = new TreeSet<>();
-        HashMap<Category,Double> answer= new HashMap<>();
+        HashMap<Category,Double> everyMonthCategories= new HashMap<>();
         for (MonthHistory m : monthHistories){
             if (m.getSumByCategory()!= null){
                 categories.addAll(m.getSumByCategory().keySet());
@@ -103,22 +103,20 @@ public class AnalysisCalc {
             boolean wasIt = true;
             double sum = 0;
             for (MonthHistory m :monthHistories){
-                if (!m.getSumByCategory().containsKey(c)) {
+                //Так как не всегда мы записывали категории, добавим костыль, что проверять будем на наличие, только
+                //если категорий больше 3.
+                if (m.getSumByCategory().size() >3 && !m.getSumByCategory().containsKey(c)) {
                     wasIt = false;
                     break;
                 }
-                sum+=m.getSumByCategory().get(c);
+                sum+=(m.getSumByCategory().containsKey(c)) ? m.getSumByCategory().get(c) : 0;
             }
 
             if (wasIt){
-                answer.put(c, sum);
+                everyMonthCategories.put(c, sum);
             }
         }
-        System.out.println("Категории, которые встречаются в каждом месяце");
-        for (Category c:answer.keySet()){
-            System.out.println(c.name+"\t\n"+answer.get(c));
-        }
-
+        return everyMonthCategories;
     }
 
 
@@ -214,10 +212,37 @@ public class AnalysisCalc {
         }
     }
 
+
+    public void printToConsoleEveryMonthCategories(){
+        HashMap<Category,Double>  everyMonthCategories = calcEveryMonthCategories(monthHistories);
+        System.out.println("Категории, которые встречаются в каждом месяце");
+        for (Category c:everyMonthCategories.keySet()){
+            System.out.printf("%15s\t %15.0f\n", c.name, everyMonthCategories.get(c));
+        }
+    }
+
+    /**
+     * Доход и расход за все года.
+     */
+    public void printAllIncomeAndOutcome(){
+        double income =0;
+        double outcome =0;
+        int cntMonths = 0;
+        for (MonthHistory m: monthHistories){
+            income+=m.getSummaryIncome();
+            outcome+=m.getSummaryOutcome();
+        }
+        System.out.printf("Приход:\t %15.0f\n",income);
+        System.out.printf("Расход:\t %15.0f\n",outcome);
+        System.out.printf("Кол-во месяцев(лет):\t %d(%d)\n",monthHistories.size(), (monthHistories.size()/12));
+    }
+
     public void run(){
         loadMonthHistories();
-        printMonthSummary();
-      //  calcEveryMonthtransaction();
+       // printMonthSummary();
+        printToConsoleEveryMonthCategories();
+        printAllIncomeAndOutcome();
+      //  calcEveryMonthCategories();
      //   calcAuto();
     }
 

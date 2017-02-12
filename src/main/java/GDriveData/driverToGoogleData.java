@@ -173,7 +173,8 @@ public class driverToGoogleData {
                         }
                         break;
                     case "категория":
-                        category = new Category(row.getCustomElements().getValue(tag));
+                        if (row.getCustomElements().getValue(tag) != null)
+                            category = new Category(row.getCustomElements().getValue(tag));
                         break;
                     default:
                         break;

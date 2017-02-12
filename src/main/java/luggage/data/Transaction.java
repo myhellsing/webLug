@@ -71,8 +71,6 @@ public class Transaction  implements Serializable{
 
     }
 
-    //test asgharghaiergharg a;rghae r
-
     public String toString(){
         return String.format("%s\t%.0f",this.name,this.sum+this.category.name);
     }

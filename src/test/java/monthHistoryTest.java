@@ -1,5 +1,7 @@
 import luggage.AnalysisCalc;
+import luggage.data.Category;
 import luggage.data.MonthHistory;
+import luggage.data.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,6 +86,33 @@ public class monthHistoryTest {
         Collections.reverse(outcomeActual);
         assertEquals(outcomeExpected,outcomeActual);
 
+    }
+
+    @Test
+    public void testgetSumByCategory(){
+        ArrayList<Transaction> transaction1 =  new ArrayList<>();
+        transaction1.add(new Transaction("Utkonos",100.0, new Category("Eat"), new Date(), Transaction.TransactionType.OUTCOME));
+        transaction1.add(new Transaction("Magnolia",120.0, new Category("Eat"), new Date(), Transaction.TransactionType.OUTCOME));
+        transaction1.add(new Transaction("Qlean", 500.0, new Category("Home"), new Date(), Transaction.TransactionType.OUTCOME));
+        transaction1.add(new Transaction("Internet",50.0, new Category("Communication"), new Date(), Transaction.TransactionType.OUTCOME));
+        transaction1.add(new Transaction("Dress",1000.0, new Category("Clothes"), new Date(), Transaction.TransactionType.OUTCOME));
+        transaction1.add(new Transaction("Shirts",300.0, new Category("Clothes"), new Date(), Transaction.TransactionType.OUTCOME));
+
+        MonthHistory m1= new MonthHistory(new Date());
+        m1.balanceAtBegin=0;
+        m1.transactions =  transaction1;
+
+        HashMap<Category,Double> expected = new HashMap<>();
+
+        expected.put(new Category("Eat"),220.0);
+        expected.put(new Category("Home"),500.0);
+        expected.put(new Category("Communication"),50.0);
+        expected.put(new Category("Clothes"),1300.0);
+
+
+        HashMap<Category,Double> actual = m1.getSumByCategory();
+
+        assertEquals(expected,actual);
     }
 
 }
