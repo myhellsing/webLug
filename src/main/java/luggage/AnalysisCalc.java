@@ -7,9 +7,7 @@ import luggage.data.MonthHistory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Created by myhellsing on 03/11/15.
@@ -195,18 +193,75 @@ public class AnalysisCalc {
     }
 */
 
+
+    // переписать
+    public HashMap<Integer,Double> getIncomeByYears(ArrayList<MonthHistory> monthHistories){
+        HashMap<Integer,Double> income = new HashMap<>();
+        double sum =0;
+        for (MonthHistory m:monthHistories){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(m.date);
+            int year = cal.get(Calendar.YEAR);
+            sum= (income.containsKey(year) ? income.get(year):0);
+            income.put(year,m.getSummaryIncome()+sum);
+        }
+        return income;
+    }
+
+    // переписать
+    public HashMap<Integer,Double> getOutcomeByYears(ArrayList<MonthHistory> monthHistories){
+        HashMap<Integer,Double> outcome = new HashMap<>();
+        double sum =0;
+        for (MonthHistory m:monthHistories){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(m.date);
+            int year = cal.get(Calendar.YEAR);
+            sum= (outcome.containsKey(year) ? outcome.get(year):0);
+            outcome.put(year, m.getSummaryOutcome() + sum);
+        }
+        return outcome;
+    }
+
+    public void printInOutComeByYears(){
+        System.out.println("Год \t\t Приход \t\t Расход \t\t Разница");
+        HashMap<Integer,Double> income = getIncomeByYears(monthHistories);
+        HashMap<Integer,Double> outcome = getOutcomeByYears(monthHistories);
+        ArrayList<Integer> years =new ArrayList<>();
+        years.addAll(income.keySet());
+        Collections.sort(years);
+
+        double incomeAll=0;
+        double outcomeAll=0;
+        for (int year:years){
+            System.out.printf("%d\t%,15d\t%,15d\t%,15d\n",
+                    year,
+                    Math.round(income.get(year)),
+                    Math.round(outcome.get(year)),
+                    Math.round(income.get(year) - outcome.get(year)));
+            incomeAll+=income.get(year);
+            outcomeAll+=outcome.get(year);
+        }
+        System.out.printf("Итого\t%,15d\t%,15d\t%,15d\n",
+                Math.round(incomeAll),
+                Math.round(outcomeAll),
+                Math.round(incomeAll-outcomeAll));
+
+
+    }
+
+
     public void printMonthSummary(){
         double prewBalance = 0;
-        System.out.println("Дата\tБаланс на начало\tПриход\tРасход\tПотери");
+        System.out.println("Дата\t  Баланс на начало\tБаланс на конец\t\tПриход\t\tРасход\t\t\tПотери");
         for (MonthHistory m:monthHistories){
 
-            System.out.printf("%s \t %10.0f \t %10.0f \t %10.0f \t %10.0f \t %10.0f \n",
+            System.out.printf("%s \t %,10d \t %,10d \t %,10d \t %,10d \t %,10d \n",
                     dateFormat.format(m.date),
-                    m.balanceAtBegin,
-                    m.getCurrentBalance(),
-                    m.getSummaryIncome(),
-                    m.getSummaryOutcome(),
-                    (Math.abs(prewBalance - m.balanceAtBegin))
+                    Math.round(m.balanceAtBegin),
+                    Math.round(m.getCurrentBalance()),
+                    Math.round(m.getSummaryIncome()),
+                    Math.round(m.getSummaryOutcome()),
+                    Math.round((Math.abs(prewBalance - m.balanceAtBegin)))
             );
             prewBalance = m.getCurrentBalance();
         }
@@ -240,10 +295,17 @@ public class AnalysisCalc {
     public void run(){
         loadMonthHistories();
        // printMonthSummary();
-        printToConsoleEveryMonthCategories();
-        printAllIncomeAndOutcome();
+        //printToConsoleEveryMonthCategories();
+       // printAllIncomeAndOutcome();
+        printInOutComeByYears();
+
+        System.out.println("--------------------------------------------------------");
+        printMonthSummary();
+
       //  calcEveryMonthCategories();
      //   calcAuto();
+
+
     }
 
 
