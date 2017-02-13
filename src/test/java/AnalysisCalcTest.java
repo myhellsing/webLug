@@ -6,10 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,10 +16,12 @@ import static org.junit.Assert.assertEquals;
 public class AnalysisCalcTest {
 
     ArrayList<MonthHistory> monthHistories;
+    AnalysisCalc analysisCalc;
 
     @Before
     public void createData(){
         monthHistories = new ArrayList<>();
+        analysisCalc= new AnalysisCalc();
         Date date = null;
         try {
             date = AnalysisCalc.dateFormat.parse("03.2016");
@@ -52,6 +51,8 @@ public class AnalysisCalcTest {
         transaction2.add(new Transaction("Magnolia",220.0, new Category("Eat"), date, Transaction.TransactionType.OUTCOME));
         transaction2.add(new Transaction("Qlean", 500.0, new Category("Home"), date, Transaction.TransactionType.OUTCOME));
         transaction2.add(new Transaction("Internet",50.0, new Category("Communication"), date, Transaction.TransactionType.OUTCOME));
+        transaction2.add(new Transaction("Зарплата",25000.0, new Category("Приход"), date, Transaction.TransactionType.INCOME));
+        transaction2.add(new Transaction("Аванс",10000.0, new Category("Приход"), date, Transaction.TransactionType.INCOME));
 
         MonthHistory m2= new MonthHistory(date);
         m2.balanceAtBegin=0;
@@ -85,9 +86,20 @@ public class AnalysisCalcTest {
         expected.put(new Category("Eat"),1040.0);
         expected.put(new Category("Home"),1500.0);
         expected.put(new Category("Communication"),150.0);
-        AnalysisCalc analysisCalc = new AnalysisCalc();
-        HashMap<Category,Double> actual = analysisCalc.calcEveryMonthCategories(monthHistories);
-        assertEquals(expected,actual);
+        assertEquals(expected,analysisCalc.calcEveryMonthCategories(monthHistories));
 
+    }
+
+    @Test
+    public void testGetSummaryByYearsAndType(){
+        HashMap<Integer,Double> expected =  new HashMap<>();
+
+        //checkOutCome
+        expected.put(2016,53840.0);
+        assertEquals(expected, analysisCalc.getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.OUTCOME));
+
+        //checkInCome
+        expected.put(2016,35000.0);
+        assertEquals(expected, analysisCalc.getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.INCOME));
     }
 }

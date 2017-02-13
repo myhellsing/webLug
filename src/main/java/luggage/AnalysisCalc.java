@@ -4,6 +4,7 @@ import GDriveData.driverToGoogleData;
 import com.google.gdata.util.ServiceException;
 import luggage.data.Category;
 import luggage.data.MonthHistory;
+import luggage.data.Transaction;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -193,39 +194,32 @@ public class AnalysisCalc {
     }
 */
 
+    /**
+     *  Считаем сумму по годам в зависимости от типа - Расход или Доход
+     * @param monthHistories  список трат по месяцам
+     * @param type тип -  INCOME или OUTCOME
+     * @return
+     */
 
-    // переписать
-    public HashMap<Integer,Double> getIncomeByYears(ArrayList<MonthHistory> monthHistories){
-        HashMap<Integer,Double> income = new HashMap<>();
+    public HashMap<Integer,Double> getSummaryByYearsAndType(ArrayList<MonthHistory> monthHistories, Transaction.TransactionType type){
+        HashMap<Integer,Double> summary = new HashMap<>();
         double sum =0;
         for (MonthHistory m:monthHistories){
             Calendar cal = Calendar.getInstance();
             cal.setTime(m.date);
             int year = cal.get(Calendar.YEAR);
-            sum= (income.containsKey(year) ? income.get(year):0);
-            income.put(year,m.getSummaryIncome()+sum);
+            sum= (summary.containsKey(year) ? summary.get(year):0);
+            summary.put(year, m.getSummaryByType(type) + sum);
         }
-        return income;
+        return summary;
     }
 
-    // переписать
-    public HashMap<Integer,Double> getOutcomeByYears(ArrayList<MonthHistory> monthHistories){
-        HashMap<Integer,Double> outcome = new HashMap<>();
-        double sum =0;
-        for (MonthHistory m:monthHistories){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(m.date);
-            int year = cal.get(Calendar.YEAR);
-            sum= (outcome.containsKey(year) ? outcome.get(year):0);
-            outcome.put(year, m.getSummaryOutcome() + sum);
-        }
-        return outcome;
-    }
+
 
     public void printInOutComeByYears(){
         System.out.println("Год \t\t Приход \t\t Расход \t\t Разница");
-        HashMap<Integer,Double> income = getIncomeByYears(monthHistories);
-        HashMap<Integer,Double> outcome = getOutcomeByYears(monthHistories);
+        HashMap<Integer,Double> income = getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.INCOME);
+        HashMap<Integer,Double> outcome = getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.OUTCOME);
         ArrayList<Integer> years =new ArrayList<>();
         years.addAll(income.keySet());
         Collections.sort(years);
