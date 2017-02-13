@@ -15,14 +15,11 @@ import java.util.*;
  */
 public class AnalysisCalc {
 
-    public ArrayList<MonthHistory> monthHistories;
+    protected ArrayList<MonthHistory> monthHistories;
     public  String localCache="data/transactions.txt";
     public Boolean quietMode =true;
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
 
-    public static void main(String[] args) {
-        new AnalysisCalc().run();
-    }
 
     public ArrayList<MonthHistory> getMonthHistories() {
         if (monthHistories == null) loadMonthHistories();
@@ -216,91 +213,16 @@ public class AnalysisCalc {
 
 
 
-    public void printInOutComeByYears(){
-        System.out.println("Год \t\t Приход \t\t Расход \t\t Разница");
-        HashMap<Integer,Double> income = getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.INCOME);
-        HashMap<Integer,Double> outcome = getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.OUTCOME);
-        ArrayList<Integer> years =new ArrayList<>();
-        years.addAll(income.keySet());
-        Collections.sort(years);
-
-        double incomeAll=0;
-        double outcomeAll=0;
-        for (int year:years){
-            System.out.printf("%d\t%,15d\t%,15d\t%,15d\n",
-                    year,
-                    Math.round(income.get(year)),
-                    Math.round(outcome.get(year)),
-                    Math.round(income.get(year) - outcome.get(year)));
-            incomeAll+=income.get(year);
-            outcomeAll+=outcome.get(year);
-        }
-        System.out.printf("Итого\t%,15d\t%,15d\t%,15d\n",
-                Math.round(incomeAll),
-                Math.round(outcomeAll),
-                Math.round(incomeAll-outcomeAll));
 
 
-    }
 
 
-    public void printMonthSummary(){
-        double prewBalance = 0;
-        System.out.println("Дата\t  Баланс на начало\tБаланс на конец\t\tПриход\t\tРасход\t\t\tПотери");
-        for (MonthHistory m:monthHistories){
-
-            System.out.printf("%s \t %,10d \t %,10d \t %,10d \t %,10d \t %,10d \n",
-                    dateFormat.format(m.date),
-                    Math.round(m.balanceAtBegin),
-                    Math.round(m.getCurrentBalance()),
-                    Math.round(m.getSummaryIncome()),
-                    Math.round(m.getSummaryOutcome()),
-                    Math.round((Math.abs(prewBalance - m.balanceAtBegin)))
-            );
-            prewBalance = m.getCurrentBalance();
-        }
-    }
 
 
-    public void printToConsoleEveryMonthCategories(){
-        HashMap<Category,Double>  everyMonthCategories = calcEveryMonthCategories(monthHistories);
-        System.out.println("Категории, которые встречаются в каждом месяце");
-        for (Category c:everyMonthCategories.keySet()){
-            System.out.printf("%15s\t %15.0f\n", c.name, everyMonthCategories.get(c));
-        }
-    }
-
-    /**
-     * Доход и расход за все года.
-     */
-    public void printAllIncomeAndOutcome(){
-        double income =0;
-        double outcome =0;
-        int cntMonths = 0;
-        for (MonthHistory m: monthHistories){
-            income+=m.getSummaryIncome();
-            outcome+=m.getSummaryOutcome();
-        }
-        System.out.printf("Приход:\t %15.0f\n",income);
-        System.out.printf("Расход:\t %15.0f\n",outcome);
-        System.out.printf("Кол-во месяцев(лет):\t %d(%d)\n",monthHistories.size(), (monthHistories.size()/12));
-    }
-
-    public void run(){
-        loadMonthHistories();
-       // printMonthSummary();
-        //printToConsoleEveryMonthCategories();
-       // printAllIncomeAndOutcome();
-        printInOutComeByYears();
-
-        System.out.println("--------------------------------------------------------");
-        printMonthSummary();
-
-      //  calcEveryMonthCategories();
-     //   calcAuto();
 
 
-    }
+
+
 
 
 }
