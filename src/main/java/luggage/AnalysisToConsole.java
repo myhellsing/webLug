@@ -99,6 +99,16 @@ public class AnalysisToConsole {
     }
 
 
+    public void printSummaryByNameOfTransaction(){
+        HashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions(analysisCalc.getMonthHistories());
+        System.out.println("Название категории\t\tСумма");
+        for (String s:result.keySet()){
+            System.out.printf("%20s\t%15d\n",s,Math.round(result.get(s)));
+        }
+
+    }
+
+
 
 
     public void run(){
@@ -115,6 +125,9 @@ public class AnalysisToConsole {
         System.out.println("--------------------------------------------------------");
 
         printToConsoleEveryMonthCategories();
+        System.out.println("--------------------------------------------------------");
+
+        printSummaryByNameOfTransaction();
         System.out.println("--------------------------------------------------------");
 
     }

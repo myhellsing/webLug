@@ -116,23 +116,25 @@ public class AnalysisCalc {
     }
 
 
- /*
-  // сумма по названиям трат
-    public void summaryByNameOfTransactions(LinkedList<Transaction> trans){
-        HashMap<String,Double> hm= new HashMap<>();
-        for (Transaction t :trans){
-            if (hm.containsKey(t.name)){
-                Double sum = hm.get(t.name)+t.sum;
-                hm.put(t.name,sum);
-            }
-            else
-                hm.put(t.name,t.sum);
-        }
-        for (String s:hm.keySet()){
-            System.out.println(s + " " + Math.abs(hm.get(s)));
-        }
-    }
 
+  // сумма по названиям трат
+
+    /**
+     *  Сумма по названиям трат ( не по категориям!)
+     * @param monthHistories
+     * @return
+     */
+    public HashMap<String,Double> getSummaryByNameOfTransactions(ArrayList<MonthHistory> monthHistories){
+        HashMap<String,Double> result= new HashMap<>();
+        for (MonthHistory m:monthHistories) {
+            for (Transaction t : m.transactions) {
+                double sum = (result.containsKey(t.name) ? result.get(t.name) : 0);
+                result.put(t.name, sum + t.sum);
+            }
+        }
+        return result;
+    }
+/*
 
     public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
         LinkedList<Transaction> sortedTransactions =new LinkedList<>();
@@ -210,19 +212,6 @@ public class AnalysisCalc {
         }
         return summary;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -102,4 +102,23 @@ public class AnalysisCalcTest {
         expected.put(2016,35000.0);
         assertEquals(expected, analysisCalc.getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.INCOME));
     }
+
+    @Test
+    public void testGetSummaryByNameOfTransactions(){
+        HashMap<String,Double> expected =  new HashMap<>();
+
+        expected.put("Utkonos",500.0);
+        expected.put("Magnolia",540.0);
+        expected.put("Qlean",1500.0);
+        expected.put("Internet",150.0);
+        expected.put("Dress",1000.0);
+        expected.put("Present for colleague",100.0);
+        expected.put("Зарплата",25000.0);
+        expected.put("Аванс",10000.0);
+        expected.put("Iphone",50000.0);
+        expected.put("Aqualor",50.0);
+
+        assertEquals(expected,analysisCalc.getSummaryByNameOfTransactions(monthHistories));
+
+    }
 }
