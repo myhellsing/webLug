@@ -46,12 +46,7 @@ public class MonthHistory  implements Serializable, Comparable {
      * @return
      */
     public double getSummaryIncome(){
-        double summaryIncome = 0;
-        for (Transaction t: transactions){
-            if ( t.type == Transaction.TransactionType.INCOME)
-                summaryIncome+=t.sum;
-        }
-        return summaryIncome;
+        return  getSummaryByType(Transaction.TransactionType.INCOME);
     }
 
     /**
@@ -59,12 +54,21 @@ public class MonthHistory  implements Serializable, Comparable {
      * @return
      */
     public double getSummaryOutcome(){
-        double summaryOutcome = 0;
+        return getSummaryByType(Transaction.TransactionType.OUTCOME);
+    }
+
+    /**
+     * Считаем сумму по типу
+     * @param type Тип транзакции  INCOME or OUTCOME
+     * @return
+     */
+    public double getSummaryByType(Transaction.TransactionType type){
+        double summary = 0;
         for (Transaction t: transactions){
-            if ( t.type == Transaction.TransactionType.OUTCOME)
-                summaryOutcome+=t.sum;
+            if ( t.type == type)
+                summary+=t.sum;
         }
-        return summaryOutcome;
+        return summary;
     }
 
     /**
