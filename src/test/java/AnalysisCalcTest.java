@@ -105,7 +105,7 @@ public class AnalysisCalcTest {
 
     @Test
     public void testGetSummaryByNameOfTransactions(){
-        HashMap<String,Double> expected =  new HashMap<>();
+        LinkedHashMap<String,Double> expected =  new LinkedHashMap<>();
 
         expected.put("Utkonos",500.0);
         expected.put("Magnolia",540.0);
@@ -118,7 +118,16 @@ public class AnalysisCalcTest {
         expected.put("Iphone",50000.0);
         expected.put("Aqualor",50.0);
 
-        assertEquals(expected,analysisCalc.getSummaryByNameOfTransactions(monthHistories));
+        LinkedHashMap<String,Double> actual  = analysisCalc.getSummaryByNameOfTransactions(monthHistories);
+        assertEquals(expected,actual);
+
+        //проверим, что отсортировалось по убыванию
+        long max =0;
+        for (String s:actual.keySet()){
+            max=Math.round(actual.get(s));
+            break;
+        }
+        assertEquals(50000,max);
 
     }
 }

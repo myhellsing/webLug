@@ -124,14 +124,19 @@ public class AnalysisCalc {
      * @param monthHistories
      * @return
      */
-    public HashMap<String,Double> getSummaryByNameOfTransactions(ArrayList<MonthHistory> monthHistories){
-        HashMap<String,Double> result= new HashMap<>();
+    public LinkedHashMap<String,Double> getSummaryByNameOfTransactions(ArrayList<MonthHistory> monthHistories){
+        HashMap<String,Double> unsortedResult= new HashMap<>();
         for (MonthHistory m:monthHistories) {
             for (Transaction t : m.transactions) {
-                double sum = (result.containsKey(t.name) ? result.get(t.name) : 0);
-                result.put(t.name, sum + t.sum);
+                double sum = (unsortedResult.containsKey(t.name) ? unsortedResult.get(t.name) : 0);
+                unsortedResult.put(t.name, sum + t.sum);
             }
         }
+        LinkedHashMap<String,Double> result = new LinkedHashMap<>();
+
+        unsortedResult.entrySet().stream().sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+
         return result;
     }
 /*

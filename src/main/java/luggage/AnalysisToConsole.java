@@ -4,9 +4,7 @@ import luggage.data.Category;
 import luggage.data.MonthHistory;
 import luggage.data.Transaction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by myhellsing on 13/02/17.
@@ -98,9 +96,12 @@ public class AnalysisToConsole {
         System.out.printf("Кол-во месяцев(лет):\t %d(%d)\n",analysisCalc.getMonthHistories().size(), (analysisCalc.getMonthHistories().size()/12));
     }
 
+    /**
+     * Суммированный список по названия трат( и расходы и доходы)
+     */
 
     public void printSummaryByNameOfTransaction(){
-        HashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions(analysisCalc.getMonthHistories());
+        LinkedHashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions(analysisCalc.getMonthHistories());
         System.out.println("Название категории\t\tСумма");
         for (String s:result.keySet()){
             System.out.printf("%20s\t%15d\n",s,Math.round(result.get(s)));
