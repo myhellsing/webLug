@@ -1,9 +1,7 @@
 package luggage.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Отчет за месяц, аналог WorksheetEntry =  один лист в Excel
@@ -30,6 +28,12 @@ public class MonthHistory  implements Serializable, Comparable {
         this.transactions = transactions;
         this.balanceAtBegin = balanceBegin;
         this.sumByCategory = sumByCategory;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        MonthHistory m = (MonthHistory)o;
+        return date.compareTo(m.date);
     }
 
     /**
@@ -95,9 +99,19 @@ public class MonthHistory  implements Serializable, Comparable {
     }
 
 
-    @Override
-    public int compareTo(Object o) {
-        MonthHistory m = (MonthHistory)o;
-        return date.compareTo(m.date);
+    /**
+     * Список трат для категории
+     * @param category
+     * @return
+     */
+
+    public LinkedList<Transaction> getTransactionsByCategory(Category category) {
+        LinkedList<Transaction> result =  new LinkedList<>();
+        transactions.forEach(t -> {
+            if (t.category.compareTo(category) == 0){
+                result.add(t);
+            }
+        });
+        return result;
     }
 }

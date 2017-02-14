@@ -149,4 +149,17 @@ public class AnalysisCalcTest {
         assertEquals(expected,actual);
 
     }
+
+    @Test
+    public void testGetTransactionsByCategory(){
+        LinkedList<Transaction> expected = new LinkedList<>();
+        expected.add(monthHistories.get(0).transactions.get(0));
+        expected.add(monthHistories.get(0).transactions.get(1));
+        expected.add(monthHistories.get(1).transactions.get(0));
+        expected.add(monthHistories.get(1).transactions.get(1));
+        expected.add(monthHistories.get(2).transactions.get(0));
+        expected.add(monthHistories.get(2).transactions.get(1));
+
+        assertEquals(expected,analysisCalc.getTransactionsByCategory(monthHistories,new Category("Eat")));
+    }
 }

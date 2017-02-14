@@ -162,6 +162,20 @@ public class AnalysisCalc {
         return result;
     }
 
+    /**
+     *  Список трат по одной категории ( без учета алиасов)
+     * @param monthHistories
+     * @param category
+     * @return
+     */
+    public LinkedList<Transaction> getTransactionsByCategory(ArrayList<MonthHistory> monthHistories, Category category){
+       LinkedList<Transaction> transactions = new LinkedList<>();
+        for (MonthHistory m:monthHistories){
+            transactions.addAll(m.getTransactionsByCategory(category));
+        }
+        return transactions;
+    }
+
 /*
 
     public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){

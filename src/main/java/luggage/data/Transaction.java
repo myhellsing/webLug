@@ -72,7 +72,7 @@ public class Transaction  implements Serializable{
     }
 
     public String toString(){
-        return String.format("%s\t%.0f",this.name,this.sum+this.category.name);
+        return String.format("%s\t%.0f\t%s",this.name,this.sum,this.category.name);
     }
 
     // for mongo
