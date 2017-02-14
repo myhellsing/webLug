@@ -7,7 +7,6 @@ import luggage.data.MonthHistory;
 import luggage.data.Transaction;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -18,7 +17,6 @@ public class AnalysisCalc {
     protected ArrayList<MonthHistory> monthHistories;
     public  String localCache="data/transactions.txt";
     public Boolean quietMode =true;
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
 
 
     public ArrayList<MonthHistory> getMonthHistories() {

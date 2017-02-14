@@ -34,8 +34,8 @@ public class monthHistoryTest {
             }
         }
         try {
-            dateTo= analysisCalc.dateFormat.parse("01.2017");
-            dateFrom= analysisCalc.dateFormat.parse("01.2016");
+            dateTo= Transaction.dateFormat.parse("01.2017");
+            dateFrom= Transaction.dateFormat.parse("01.2016");
         } catch (ParseException e) {
             e.printStackTrace();
         }

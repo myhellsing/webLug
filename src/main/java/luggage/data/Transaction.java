@@ -4,6 +4,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
  * Created by myhellsing on 11/05/15.
  */
 public class Transaction  implements Serializable{
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("MM.yyyy");
 
     public enum TransactionType {INCOME,OUTCOME }; //"INCOME" (приход) or "OUTCOME" (расход)
 
@@ -72,7 +75,7 @@ public class Transaction  implements Serializable{
     }
 
     public String toString(){
-        return String.format("%s\t%.0f\t%s",this.name,this.sum,this.category.name);
+        return String.format("%20s\t%15.0f\t%20s\t%s",this.name,this.sum,this.category.name, dateFormat.format(date));
     }
 
     // for mongo

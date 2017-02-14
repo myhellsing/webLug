@@ -24,7 +24,7 @@ public class AnalysisCalcTest {
         analysisCalc= new AnalysisCalc();
         Date date = null;
         try {
-            date = AnalysisCalc.dateFormat.parse("03.2016");
+            date = Transaction.dateFormat.parse("03.2016");
         } catch (ParseException e) {
             e.printStackTrace();
         }

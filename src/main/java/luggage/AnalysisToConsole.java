@@ -57,7 +57,7 @@ public class AnalysisToConsole {
         for (MonthHistory m:analysisCalc.getMonthHistories()){
 
             System.out.printf("%s \t %,10d \t %,10d \t %,10d \t %,10d \t %,10d \n",
-                    analysisCalc.dateFormat.format(m.date),
+                    Transaction.dateFormat.format(m.date),
                     Math.round(m.balanceAtBegin),
                     Math.round(m.getCurrentBalance()),
                     Math.round(m.getSummaryIncome()),
@@ -122,6 +122,13 @@ public class AnalysisToConsole {
     }
 
 
+    public void printTransactions(LinkedList<Transaction> transactions){
+        System.out.println("Список траты: "+ transactions.size());
+        transactions.forEach(t->{
+            System.out.println(t);
+        });
+    }
+
 
     public void run(){
         analysisCalc = new AnalysisCalc();
@@ -143,6 +150,10 @@ public class AnalysisToConsole {
         System.out.println("--------------------------------------------------------");
 
         printSummaryByCategoryName();
+        System.out.println("--------------------------------------------------------");
+
+
+        printTransactions(analysisCalc.getTransactionsByCategory(analysisCalc.getMonthHistories(),new Category(Category.UNKNOWN)) );
         System.out.println("--------------------------------------------------------");
     }
 
