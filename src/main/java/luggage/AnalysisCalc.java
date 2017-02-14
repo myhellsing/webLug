@@ -139,6 +139,29 @@ public class AnalysisCalc {
 
         return result;
     }
+
+    /**
+     * Сумма по категориям за все время ( без учета алиасов категорий)
+     * @param monthHistories
+     * @return
+     */
+
+    public LinkedHashMap<Category,Double> getSummaryByCategoryName(ArrayList<MonthHistory> monthHistories){
+        HashMap<Category,Double> unsortedResult =  new HashMap<>();
+        for ( MonthHistory m:monthHistories){
+            for (Category c:m.getSumByCategory().keySet()){
+                double sum =  (unsortedResult.containsKey(c) ? unsortedResult.get(c) : 0);
+                unsortedResult.put(c,sum+m.getSumByCategory().get(c));
+            }
+        }
+
+        LinkedHashMap<Category,Double> result = new LinkedHashMap<>();
+        unsortedResult.entrySet().stream().sorted(Map.Entry.<Category,Double>comparingByValue().reversed())
+                .forEachOrdered(x -> result.put(x.getKey(),x.getValue()));
+
+        return result;
+    }
+
 /*
 
     public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
@@ -154,18 +177,6 @@ public class AnalysisCalc {
         return sortedTransactions;
     }
 
-    public LinkedList<Transaction> getTransactionsByYear(int year, LinkedList<Transaction> trans){
-        LinkedList<Transaction> sortedTransactions = new LinkedList<>();
-        for (Transaction t:trans){
-            if (t.getYear() == year)
-                sortedTransactions.add(t);
-        }
-        return sortedTransactions;
-    }
-
-    public void printMoney(int currentYear, long allmoney){
-        System.out.println(currentYear+": "+allmoney+" by month "+(allmoney/12) );
-    }
 
     public void calcAuto(){
         List<String> aliases = new LinkedList<>();

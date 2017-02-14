@@ -102,13 +102,24 @@ public class AnalysisToConsole {
 
     public void printSummaryByNameOfTransaction(){
         LinkedHashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions(analysisCalc.getMonthHistories());
-        System.out.println("Название категории\t\tСумма");
+        System.out.println("Название траты\t\tСумма");
         for (String s:result.keySet()){
-            System.out.printf("%20s\t%15d\n",s,Math.round(result.get(s)));
+            System.out.printf("%20s\t%,15d\n",s,Math.round(result.get(s)));
         }
 
     }
 
+    /**
+     * Суммированный список по категориям ( и расходы и доходы)
+     */
+
+    public void printSummaryByCategoryName(){
+        LinkedHashMap<Category,Double> result = analysisCalc.getSummaryByCategoryName(analysisCalc.getMonthHistories());
+        System.out.println("Название категории\t\tСумма");
+        for (Category s:result.keySet()){
+            System.out.printf("%20s\t%,15d\n",s.name,Math.round(result.get(s)));
+        }
+    }
 
 
 
@@ -131,6 +142,8 @@ public class AnalysisToConsole {
         printSummaryByNameOfTransaction();
         System.out.println("--------------------------------------------------------");
 
+        printSummaryByCategoryName();
+        System.out.println("--------------------------------------------------------");
     }
 
 }

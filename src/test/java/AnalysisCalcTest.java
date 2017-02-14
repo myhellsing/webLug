@@ -130,4 +130,23 @@ public class AnalysisCalcTest {
         assertEquals(50000,max);
 
     }
+
+    @Test
+    public void testGetSummaryByCategoryName(){
+        LinkedHashMap<Category,Double> expected =  new LinkedHashMap<>();
+
+        expected.put(new Category("Eat"),1040.0);
+        expected.put(new Category("Home"),1500.0);
+        expected.put(new Category("Communication"),150.0);
+        expected.put(new Category("Clothes"),1000.0);
+        expected.put(new Category("Present"),100.0);
+        expected.put(new Category("Приход"),35000.0);
+        expected.put(new Category("Gadgets"),50000.0);
+        expected.put(new Category("Medicine"),50.0);
+
+        LinkedHashMap<Category,Double> actual = analysisCalc.getSummaryByCategoryName(monthHistories);
+
+        assertEquals(expected,actual);
+
+    }
 }
