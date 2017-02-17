@@ -181,7 +181,6 @@ public class AnalysisCalcTest {
         expected.add(new Category("Communication"));
         expected.add(new Category("Clothes"));
         expected.add(new Category("Present"));
-        expected.add(new Category("Приход"));
         expected.add(new Category("Gadgets"));
         expected.add(new Category("Medicine"));
 

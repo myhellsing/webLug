@@ -92,7 +92,8 @@ public class AnalysisCalc {
         for (MonthHistory m:monthHistories){
             for (Transaction t:m.transactions){
                 Category category = t.category;
-                if (t.category.name.compareTo(Category.UNKNOWN) ==0) continue;
+                // неизвестные категории или Приход будем игнорировать.
+                if (t.category.name.compareTo(Category.UNKNOWN) ==0 || t.type == Transaction.TransactionType.INCOME) continue;
                 if (categoriesWithAliases.containsKey(t.name)){
                     category = categoriesWithAliases.get(t.name);
                     //если названия категории еще нет среди алиасов и название категории траты не совпадает с уже запомненным названием категории
