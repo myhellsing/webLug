@@ -101,13 +101,13 @@ public class AnalysisCalc {
                 categoriesWithAliases.put(t.name,category);
             }
         }
+        
+        //Теперь нужно убрать дублирующиеся  категории с разными тратами
         ArrayList<Category> result = new ArrayList<Category>();
         for (Category category:categoriesWithAliases.values() ){
             if (result.contains(category)){
-                Category cat1 = result.get(result.indexOf(category));
-                result.remove(category);
-                category.aliases.addAll(cat1.aliases);
-            }
+                result.get(result.indexOf(category)).aliases.addAll(category.aliases);
+            } else
             result.add(category);
         }
         return result;
