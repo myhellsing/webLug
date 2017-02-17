@@ -129,11 +129,23 @@ public class AnalysisToConsole {
         });
     }
 
+    public void printGeneratedAliases(){
+        ArrayList<Category> categories = analysisCalc.generateCategoryAliases(analysisCalc.getMonthHistories());
+        for (Category c:categories) {
+            if (c.aliases.size() > 0) {
+                System.out.print(c.name + "\t");
+                for (String s : c.aliases) {
+                    System.out.print(" " + s);
+                }
+                System.out.println();
+            }
+        }
+    }
 
     public void run(){
         analysisCalc = new AnalysisCalc();
 
-
+/*
         printAllIncomeAndOutcome();
         System.out.println("--------------------------------------------------------");
 
@@ -154,6 +166,11 @@ public class AnalysisToConsole {
 
 
         printTransactions(analysisCalc.getTransactionsByCategory(analysisCalc.getMonthHistories(),new Category(Category.UNKNOWN)) );
+        System.out.println("--------------------------------------------------------");
+
+        */
+
+        printGeneratedAliases();
         System.out.println("--------------------------------------------------------");
     }
 
