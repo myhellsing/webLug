@@ -162,4 +162,40 @@ public class AnalysisCalcTest {
 
         assertEquals(expected,analysisCalc.getTransactionsByCategory(monthHistories,new Category("Eat")));
     }
+
+
+    @Test
+    public void testGenerateCategoryAliases(){
+
+        ArrayList<MonthHistory> mCopy= (ArrayList<MonthHistory>)monthHistories.clone();
+        mCopy.get(0).transactions.add(new Transaction("Qlean",100.0, new Category("House"), new Date(), Transaction.TransactionType.OUTCOME));
+
+
+        ArrayList<Category> expected = new ArrayList<>();
+        expected.add(new Category("Eat"));
+        expected.add(new Category("Home"));
+        expected.get(1).aliases.add("House");
+
+        expected.add(new Category("Communication"));
+        expected.add(new Category("Clothes"));
+        expected.add(new Category("Present"));
+        expected.add(new Category("Приход"));
+        expected.add(new Category("Gadgets"));
+        expected.add(new Category("Medicine"));
+
+        ArrayList<Category> actual =analysisCalc.generateCategoryAliases(mCopy);
+        assertEquals(expected.size(),actual.size());
+
+        Collections.sort(expected);
+        Collections.sort(actual);
+
+
+        for (Category expectedCategory:expected){
+             if (actual.contains(expectedCategory)){
+                 Category actualCategory = actual.get(actual.indexOf(expectedCategory));
+                 assertEquals(expectedCategory.name,actualCategory.name);
+                 assertEquals(expectedCategory.aliases,actualCategory.aliases);
+             }
+        }
+    }
 }

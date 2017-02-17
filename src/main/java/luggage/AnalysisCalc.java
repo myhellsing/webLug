@@ -83,6 +83,37 @@ public class AnalysisCalc {
     }
 
     /**
+     * Генерируем список алиасов для категоний на основании трат
+     * @param monthHistories
+     * @return список категорий с заполненными алиасами
+     */
+    public ArrayList<Category> generateCategoryAliases(ArrayList<MonthHistory> monthHistories){
+        HashMap<String,Category> categoriesWithAliases = new HashMap<>();
+        for (MonthHistory m:monthHistories){
+            for (Transaction t:m.transactions){
+                Category category = t.category;
+                if (categoriesWithAliases.containsKey(t.name)){
+                    category = categoriesWithAliases.get(t.name);
+                    //если названия категории еще нет среди алиасов и название категории траты не совпадает с уже запомненным названием категории
+                    if (!category.aliases.contains(t.category.name) && category.name.compareTo(t.category.name)!=0)
+                        category.aliases.add(t.category.name);
+                }
+                categoriesWithAliases.put(t.name,category);
+            }
+        }
+        ArrayList<Category> result = new ArrayList<Category>();
+        for (Category category:categoriesWithAliases.values() ){
+            if (result.contains(category)){
+                Category cat1 = result.get(result.indexOf(category));
+                result.remove(category);
+                category.aliases.addAll(cat1.aliases);
+            }
+            result.add(category);
+        }
+        return result;
+    }
+
+    /**
      *  Список ежемесячных трат
      */
     public HashMap<Category,Double> calcEveryMonthCategories(ArrayList<MonthHistory> monthHistories){
