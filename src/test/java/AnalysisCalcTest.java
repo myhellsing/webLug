@@ -169,6 +169,8 @@ public class AnalysisCalcTest {
 
         ArrayList<MonthHistory> mCopy= (ArrayList<MonthHistory>)monthHistories.clone();
         mCopy.get(0).transactions.add(new Transaction("Qlean",100.0, new Category("House"), new Date(), Transaction.TransactionType.OUTCOME));
+       //а неизвестную категорию будем игнорировать
+        mCopy.get(1).transactions.add(new Transaction("Qlean",100.0, new Category(Category.UNKNOWN), new Date(), Transaction.TransactionType.OUTCOME));
 
 
         ArrayList<Category> expected = new ArrayList<>();
@@ -198,4 +200,5 @@ public class AnalysisCalcTest {
              }
         }
     }
+
 }
