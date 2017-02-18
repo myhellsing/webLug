@@ -18,6 +18,19 @@ public class AnalysisCalc {
     public  String localCache="data/transactions.txt";
     public Boolean quietMode =true;
 
+    /**
+     * Конструктор для поведения по умолчанию
+     */
+    public AnalysisCalc() {
+    }
+
+    /**
+     * Конструктор для тестов :)
+     * @param monthHistories
+     */
+    public AnalysisCalc(ArrayList<MonthHistory> monthHistories) {
+        this.monthHistories = monthHistories;
+    }
 
     public ArrayList<MonthHistory> getMonthHistories() {
         if (monthHistories == null) loadMonthHistories();
@@ -84,10 +97,9 @@ public class AnalysisCalc {
 
     /**
      * Генерируем список алиасов для категоний на основании трат
-     * @param monthHistories
      * @return список категорий с заполненными алиасами
      */
-    public ArrayList<Category> generateCategoryAliases(ArrayList<MonthHistory> monthHistories){
+    public ArrayList<Category> generateCategoryAliases(){
         HashMap<String,Category> categoriesWithAliases = new HashMap<>();
         for (MonthHistory m:monthHistories){
             for (Transaction t:m.transactions){
@@ -118,7 +130,7 @@ public class AnalysisCalc {
     /**
      *  Список ежемесячных трат
      */
-    public HashMap<Category,Double> calcEveryMonthCategories(ArrayList<MonthHistory> monthHistories){
+    public HashMap<Category,Double> calcEveryMonthCategories(){
         TreeSet<Category> categories = new TreeSet<>();
         HashMap<Category,Double> everyMonthCategories= new HashMap<>();
         for (MonthHistory m : monthHistories){
@@ -152,10 +164,9 @@ public class AnalysisCalc {
 
     /**
      *  Сумма по названиям трат ( не по категориям!)
-     * @param monthHistories
      * @return
      */
-    public LinkedHashMap<String,Double> getSummaryByNameOfTransactions(ArrayList<MonthHistory> monthHistories){
+    public LinkedHashMap<String,Double> getSummaryByNameOfTransactions(){
         HashMap<String,Double> unsortedResult= new HashMap<>();
         for (MonthHistory m:monthHistories) {
             for (Transaction t : m.transactions) {
@@ -173,11 +184,10 @@ public class AnalysisCalc {
 
     /**
      * Сумма по категориям за все время ( без учета алиасов категорий)
-     * @param monthHistories
      * @return
      */
 
-    public LinkedHashMap<Category,Double> getSummaryByCategoryName(ArrayList<MonthHistory> monthHistories){
+    public LinkedHashMap<Category,Double> getSummaryByCategoryName(){
         HashMap<Category,Double> unsortedResult =  new HashMap<>();
         for ( MonthHistory m:monthHistories){
             for (Category c:m.getSumByCategory().keySet()){
@@ -195,11 +205,10 @@ public class AnalysisCalc {
 
     /**
      *  Список трат по одной категории ( без учета алиасов)
-     * @param monthHistories
      * @param category
      * @return
      */
-    public LinkedList<Transaction> getTransactionsByCategory(ArrayList<MonthHistory> monthHistories, Category category){
+    public LinkedList<Transaction> getTransactionsByCategory(Category category){
        LinkedList<Transaction> transactions = new LinkedList<>();
         for (MonthHistory m:monthHistories){
             transactions.addAll(m.getTransactionsByCategory(category));
@@ -256,12 +265,11 @@ public class AnalysisCalc {
 
     /**
      *  Считаем сумму по годам в зависимости от типа - Расход или Доход
-     * @param monthHistories  список трат по месяцам
      * @param type тип -  INCOME или OUTCOME
      * @return
      */
 
-    public HashMap<Integer,Double> getSummaryByYearsAndType(ArrayList<MonthHistory> monthHistories, Transaction.TransactionType type){
+    public HashMap<Integer,Double> getSummaryByYearsAndType(Transaction.TransactionType type){
         HashMap<Integer,Double> summary = new HashMap<>();
         double sum =0;
         for (MonthHistory m:monthHistories){

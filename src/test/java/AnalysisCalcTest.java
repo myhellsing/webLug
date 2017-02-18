@@ -21,7 +21,6 @@ public class AnalysisCalcTest {
     @Before
     public void createData(){
         monthHistories = new ArrayList<>();
-        analysisCalc= new AnalysisCalc();
         Date date = null;
         try {
             date = Transaction.dateFormat.parse("03.2016");
@@ -77,6 +76,8 @@ public class AnalysisCalcTest {
         monthHistories.add(m1);
         monthHistories.add(m2);
         monthHistories.add(m3);
+
+        analysisCalc= new AnalysisCalc(monthHistories);
     }
 
 
@@ -86,7 +87,7 @@ public class AnalysisCalcTest {
         expected.put(new Category("Eat"),1040.0);
         expected.put(new Category("Home"),1500.0);
         expected.put(new Category("Communication"),150.0);
-        assertEquals(expected,analysisCalc.calcEveryMonthCategories(monthHistories));
+        assertEquals(expected,analysisCalc.calcEveryMonthCategories());
 
     }
 
@@ -96,11 +97,11 @@ public class AnalysisCalcTest {
 
         //checkOutCome
         expected.put(2016,53840.0);
-        assertEquals(expected, analysisCalc.getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.OUTCOME));
+        assertEquals(expected, analysisCalc.getSummaryByYearsAndType(Transaction.TransactionType.OUTCOME));
 
         //checkInCome
         expected.put(2016,35000.0);
-        assertEquals(expected, analysisCalc.getSummaryByYearsAndType(monthHistories, Transaction.TransactionType.INCOME));
+        assertEquals(expected, analysisCalc.getSummaryByYearsAndType( Transaction.TransactionType.INCOME));
     }
 
     @Test
@@ -118,7 +119,7 @@ public class AnalysisCalcTest {
         expected.put("Iphone",50000.0);
         expected.put("Aqualor",50.0);
 
-        LinkedHashMap<String,Double> actual  = analysisCalc.getSummaryByNameOfTransactions(monthHistories);
+        LinkedHashMap<String,Double> actual  = analysisCalc.getSummaryByNameOfTransactions();
         assertEquals(expected,actual);
 
         //проверим, что отсортировалось по убыванию
@@ -144,7 +145,7 @@ public class AnalysisCalcTest {
         expected.put(new Category("Gadgets"),50000.0);
         expected.put(new Category("Medicine"),50.0);
 
-        LinkedHashMap<Category,Double> actual = analysisCalc.getSummaryByCategoryName(monthHistories);
+        LinkedHashMap<Category,Double> actual = analysisCalc.getSummaryByCategoryName();
 
         assertEquals(expected,actual);
 
@@ -160,7 +161,7 @@ public class AnalysisCalcTest {
         expected.add(monthHistories.get(2).transactions.get(0));
         expected.add(monthHistories.get(2).transactions.get(1));
 
-        assertEquals(expected,analysisCalc.getTransactionsByCategory(monthHistories,new Category("Eat")));
+        assertEquals(expected,analysisCalc.getTransactionsByCategory(new Category("Eat")));
     }
 
 
@@ -184,7 +185,8 @@ public class AnalysisCalcTest {
         expected.add(new Category("Gadgets"));
         expected.add(new Category("Medicine"));
 
-        ArrayList<Category> actual =analysisCalc.generateCategoryAliases(mCopy);
+        AnalysisCalc analysisCalc1=new AnalysisCalc(mCopy);
+        ArrayList<Category> actual =analysisCalc1.generateCategoryAliases();
         assertEquals(expected.size(),actual.size());
 
         Collections.sort(expected);

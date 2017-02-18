@@ -22,8 +22,8 @@ public class AnalysisToConsole {
      */
     public void printInOutComeByYears(){
         System.out.println("Год \t\t Приход \t\t Расход \t\t Разница");
-        HashMap<Integer,Double> income = analysisCalc.getSummaryByYearsAndType(analysisCalc.getMonthHistories(), Transaction.TransactionType.INCOME);
-        HashMap<Integer,Double> outcome = analysisCalc.getSummaryByYearsAndType(analysisCalc.getMonthHistories(), Transaction.TransactionType.OUTCOME);
+        HashMap<Integer,Double> income = analysisCalc.getSummaryByYearsAndType( Transaction.TransactionType.INCOME);
+        HashMap<Integer,Double> outcome = analysisCalc.getSummaryByYearsAndType(Transaction.TransactionType.OUTCOME);
 
         // TODO refactor this
         ArrayList<Integer> years =new ArrayList<>();
@@ -73,7 +73,7 @@ public class AnalysisToConsole {
      */
 
     public void printToConsoleEveryMonthCategories(){
-        HashMap<Category,Double>  everyMonthCategories = analysisCalc.calcEveryMonthCategories(analysisCalc.getMonthHistories());
+        HashMap<Category,Double>  everyMonthCategories = analysisCalc.calcEveryMonthCategories();
         System.out.println("Категории, которые встречаются в каждом месяце");
         for (Category c:everyMonthCategories.keySet()){
             System.out.printf("%15s\t %15.0f\n", c.name, everyMonthCategories.get(c));
@@ -101,7 +101,7 @@ public class AnalysisToConsole {
      */
 
     public void printSummaryByNameOfTransaction(){
-        LinkedHashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions(analysisCalc.getMonthHistories());
+        LinkedHashMap<String,Double> result = analysisCalc.getSummaryByNameOfTransactions();
         System.out.println("Название траты\t\tСумма");
         for (String s:result.keySet()){
             System.out.printf("%20s\t%,15d\n",s,Math.round(result.get(s)));
@@ -114,7 +114,7 @@ public class AnalysisToConsole {
      */
 
     public void printSummaryByCategoryName(){
-        LinkedHashMap<Category,Double> result = analysisCalc.getSummaryByCategoryName(analysisCalc.getMonthHistories());
+        LinkedHashMap<Category,Double> result = analysisCalc.getSummaryByCategoryName();
         System.out.println("Название категории\t\tСумма");
         for (Category s:result.keySet()){
             System.out.printf("%20s\t%,15d\n",s.name,Math.round(result.get(s)));
@@ -130,7 +130,7 @@ public class AnalysisToConsole {
     }
 
     public void printGeneratedAliases(){
-        ArrayList<Category> categories = analysisCalc.generateCategoryAliases(analysisCalc.getMonthHistories());
+        ArrayList<Category> categories = analysisCalc.generateCategoryAliases();
         for (Category c:categories) {
             if (c.aliases.size() > 0) {
                 System.out.print(c.name + "\t");
