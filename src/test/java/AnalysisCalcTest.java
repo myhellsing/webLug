@@ -202,4 +202,18 @@ public class AnalysisCalcTest {
         }
     }
 
+    @Test
+    public void testGetTransactionsByCategoryAndAliases(){
+        ArrayList<Transaction> expected = new ArrayList<>();
+        for (MonthHistory m:monthHistories){
+            expected.add(m.transactions.get(0));
+            expected.add(m.transactions.get(1));
+        }
+
+        assertEquals(expected,analysisCalc.getTransactionsByCategory(new Category("Eat")));
+
+        //TODO проверить еще случай с алиасами категорий
+
+    }
+
 }

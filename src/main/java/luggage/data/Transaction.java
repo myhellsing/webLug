@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Трата
@@ -65,13 +64,12 @@ public class Transaction  implements Serializable{
         return calendar.get(Calendar.YEAR);
     }
 
-    public boolean isCategoryFrom(List<String> lt){
-        for (String s:lt){
-            if (category !=null && category.name != null &&  category.name.contains(s.trim()))
-                return true;
+    public boolean belongCategory(Category category){
+        if (this.category.name.compareTo(category.name) == 0 ) return true;
+        for (String alias:category.aliases){
+            if (this.category.name.compareTo(alias) == 0 ) return  true;
         }
         return false;
-
     }
 
     public String toString(){

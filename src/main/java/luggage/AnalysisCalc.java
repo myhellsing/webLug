@@ -216,20 +216,27 @@ public class AnalysisCalc {
         return transactions;
     }
 
-/*
+    /**
+     * Список транзакций, которые относятся к категории
+     * @param category Категории
+     * @return
+     */
 
-    public LinkedList<Transaction> getTransactionsByCategoryAliases(List<String> lt){
+    public LinkedList<Transaction> getTransactionsByCategoryAndAliases(Category category){
         LinkedList<Transaction> sortedTransactions =new LinkedList<>();
-        if (!quietMode) System.out.println("Searching for " + lt.get(0));
-        for (Transaction t:transactions){
-            if (t.isCategoryFrom(lt)){
-                sortedTransactions.add(t);
-                if (!quietMode) System.out.println(t.getYear()+": "+t);
+        for (MonthHistory m:monthHistories) {
+            for (Transaction transaction : m.transactions) {
+                if (transaction.belongCategory(category)) {
+                    sortedTransactions.add(transaction);
+                }
             }
         }
-        if (!quietMode) System.out.println("Found "+sortedTransactions.size());
         return sortedTransactions;
     }
+
+/*
+
+
 
 
     public void calcAuto(){
