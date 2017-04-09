@@ -142,6 +142,19 @@ public class AnalysisToConsole {
         }
     }
 
+    public void printTransactionNameAndAllCategoryNames(){
+        HashMap<String,LinkedList<Category>> result = analysisCalc.getCategoriesBySameTransactionName();
+        for (String transactionName:result.keySet()){
+            if (result.get(transactionName).size() > 1) {
+                System.out.printf("%20s\t\t",transactionName);
+                for (Category c : result.get(transactionName)) {
+                    System.out.print(c.name + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
     public void run(){
         analysisCalc = new AnalysisCalc();
 
@@ -168,10 +181,16 @@ public class AnalysisToConsole {
         printTransactions(analysisCalc.getTransactionsByCategory(analysisCalc.getMonthHistories(),new Category(Category.UNKNOWN)) );
         System.out.println("--------------------------------------------------------");
 
-        */
+        /**/
 
+        /**
         printGeneratedAliases();
         System.out.println("--------------------------------------------------------");
+
+        */
+        printTransactionNameAndAllCategoryNames();
+        System.out.println("--------------------------------------------------------");
+
     }
 
 }

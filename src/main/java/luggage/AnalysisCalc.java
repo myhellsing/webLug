@@ -97,16 +97,47 @@ public class AnalysisCalc {
     }
 
     /**
+     * Название Траты - список категорий, который для нее указывался.
+     * @return
+     */
+
+    public HashMap<String,LinkedList<Category>> getCategoriesBySameTransactionName() {
+        HashMap<String, LinkedList<Category>> sameCategoryByTransaction = new HashMap<>();
+        for (MonthHistory m : monthHistories) {  //  пройдемся по месяцам
+            for (Transaction t : m.transactions) { // список трат в месяце
+                if (isUnknownCategoryOrIncome(t)) continue;
+                LinkedList<Category> categoryList = new LinkedList<>(); // список похожих категорий
+                if (sameCategoryByTransaction.containsKey(t.name)) {  // если трата с таким именем уже встречалась - добавим категорию
+                    categoryList = sameCategoryByTransaction.get(t.name);
+                }
+                if (!categoryList.contains(t.category))
+                    categoryList.add(t.category);// добавим категорию, если еще не было такой
+                sameCategoryByTransaction.put(t.name, categoryList);
+            }
+        }
+        return sameCategoryByTransaction;
+    }
+
+
+
+    public boolean isUnknownCategoryOrIncome(Transaction t){
+        // неизвестные категории или Приход будем игнорировать.
+        return (t.category.name.compareTo(Category.UNKNOWN) ==0 || t.type == Transaction.TransactionType.INCOME);
+    }
+
+
+    /**
      * Генерируем список алиасов для категоний на основании трат
      * @return список категорий с заполненными алиасами
      */
+
     public ArrayList<Category> generateCategoryAliases(){
         HashMap<String,Category> categoriesWithAliases = new HashMap<>();
         for (MonthHistory m:monthHistories){
             for (Transaction t:m.transactions){
                 Category category = t.category;
                 // неизвестные категории или Приход будем игнорировать.
-                if (t.category.name.compareTo(Category.UNKNOWN) ==0 || t.type == Transaction.TransactionType.INCOME) continue;
+                if (isUnknownCategoryOrIncome(t)) continue;
                 if (categoriesWithAliases.containsKey(t.name)){
                     category = categoriesWithAliases.get(t.name);
                     //если названия категории еще нет среди алиасов и название категории траты не совпадает с уже запомненным названием категории
@@ -126,6 +157,7 @@ public class AnalysisCalc {
             result.add(category);
         }
         return result;
+ /**/
     }
 
     /**
