@@ -22,6 +22,7 @@ public class AnalysisCalc {
      * Конструктор для поведения по умолчанию
      */
     public AnalysisCalc() {
+        loadMonthHistories();
     }
 
     /**
