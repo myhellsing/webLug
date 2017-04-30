@@ -146,7 +146,7 @@ public class AnalysisToConsole {
         HashMap<String,LinkedList<Category>> result = analysisCalc.getCategoriesBySameTransactionName();
         for (String transactionName:result.keySet()){
             if (result.get(transactionName).size() > 1) {
-                System.out.printf("%20s\t\t",transactionName);
+                System.out.printf("%20s\t\t", transactionName);
                 for (Category c : result.get(transactionName)) {
                     System.out.print(c.name + " ");
                 }
@@ -183,14 +183,14 @@ public class AnalysisToConsole {
 
         /**/
 
-        /**
+        /**/
         printGeneratedAliases();
         System.out.println("--------------------------------------------------------");
 
-        */
+        /**
         printTransactionNameAndAllCategoryNames();
         System.out.println("--------------------------------------------------------");
-
+       /**/
     }
 
 }

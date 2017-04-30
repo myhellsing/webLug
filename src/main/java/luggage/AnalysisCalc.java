@@ -17,12 +17,18 @@ public class AnalysisCalc {
     protected ArrayList<MonthHistory> monthHistories;
     public  String localCache="data/transactions.txt";
     public Boolean quietMode =true;
+    public ArrayList<Category> categories;
 
     /**
      * Конструктор для поведения по умолчанию
      */
     public AnalysisCalc() {
         loadMonthHistories();
+        loadCategories();
+    }
+
+    public void loadCategories() {
+        categories=this.generateCategoryAliases();
     }
 
     /**
@@ -119,7 +125,6 @@ public class AnalysisCalc {
     }
 
 
-
     public boolean isUnknownCategoryOrIncome(Transaction t){
         // неизвестные категории или Приход будем игнорировать.
         return (t.category.name.compareTo(Category.UNKNOWN) ==0 || t.type == Transaction.TransactionType.INCOME);
@@ -159,6 +164,8 @@ public class AnalysisCalc {
         return result;
  /**/
     }
+
+
 
     /**
      *  Список ежемесячных трат
