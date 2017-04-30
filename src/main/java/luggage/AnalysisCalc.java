@@ -15,7 +15,7 @@ import java.util.*;
 public class AnalysisCalc {
 
     protected ArrayList<MonthHistory> monthHistories;
-    public  String localCache="data/transactions.txt";
+    public  String localCacheTransactions="data/transactions.txt";
     public Boolean quietMode =true;
 
     /**
@@ -39,7 +39,8 @@ public class AnalysisCalc {
     }
 
     public void loadMonthHistories(){
-        if (getFromLocalCache()) return;
+        monthHistories = (ArrayList<MonthHistory>)getFromLocalCache(localCacheTransactions);
+        if (monthHistories != null) return;
         driverToGoogleData rd = new driverToGoogleData();
         try {
             monthHistories = rd.getMonthHistories();
@@ -48,25 +49,25 @@ public class AnalysisCalc {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        saveLocalCache();
+        saveLocalCache(localCacheTransactions,monthHistories);
     }
 
     /**
      * Достаем данные из локального файла, путь к которому указан в localCache
      * @return
      */
-    public  boolean getFromLocalCache(){
-
+    public  Object getFromLocalCache(String fileName){
+        Object result= null;
         try {
-            File f = new File(localCache);
-            if (!f.exists()) return false;
+            File f = new File(fileName);
+            if (!f.exists()) return null;
             FileInputStream fileIn = new FileInputStream(f);
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            monthHistories = (ArrayList<MonthHistory>) in.readObject();
+            result = in.readObject();
             in.close();
             fileIn.close();
 
-            return true;
+            return result;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -74,18 +75,18 @@ public class AnalysisCalc {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     /**
      * Сохраняем данные в локальный файл по пути, указанному в localCache
      */
-    public  void saveLocalCache (){
+    public  void saveLocalCache (String fileName, Object object){
         try {
             //кешируем траты
-            FileOutputStream fileOut = new FileOutputStream(localCache);
+            FileOutputStream fileOut = new FileOutputStream(fileName);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(monthHistories);
+            out.writeObject(object);
             out.close();
             fileOut.close();
 
