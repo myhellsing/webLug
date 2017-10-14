@@ -10,6 +10,8 @@ import luggage.AnalysisCalc;
 import luggage.BalanceByMonth;
 import luggage.data.MonthHistory;
 import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
 import spark.template.pebble.PebbleTemplateEngine;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class Main {
 
         Loader loader = new FileLoader();
         loader.setPrefix("views/");
+        loadData();
 
         get("/hello", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -50,9 +53,9 @@ public class Main {
             return monthHistories.size();
         });
 
-        get("/transactions", (req,res)->{
+        get("/transactions", (Request req, Response res) -> {
             return monthHistories;
-        });
+        }, gson::toJson);
 
 
      /*   get("/income", (req,res) -> {
