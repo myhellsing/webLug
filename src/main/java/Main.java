@@ -55,7 +55,7 @@ public class Main {
          */
         get("/hello", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("message", "Hello World!");
+            attributes.put("message", "Hello World from Pebble!");
 
             return new ModelAndView(attributes, "hello.pebble");
         }, new PebbleTemplateEngine(loader));
