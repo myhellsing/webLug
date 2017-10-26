@@ -1,0 +1,16 @@
+<table>
+<thead>
+<td width="300px">Название траты</td>
+<td width="100px">Сумма</td>
+<td width="100px">Категория</td>
+</thead>
+<tbody>
+{% for transaction in month.transactions %}
+  <tr>
+  <td>{{transaction.name}}</td>
+  <td>{{transaction.sum}}</td>
+  <td>{{transaction.category.name}}</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>

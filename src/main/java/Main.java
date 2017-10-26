@@ -62,7 +62,7 @@ public class Main {
 
         get("/recent-month", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("month", monthHistories.get(monthHistories.size()-1));
+            attributes.put("month", monthHistories.get(monthHistories.size()-2));
 
             return new ModelAndView(attributes, "month.pebble");
         }, new PebbleTemplateEngine(loader));
