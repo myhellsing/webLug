@@ -1,3 +1,2 @@
 <h1>{{ message }}</h1>
-<h1>The above text is set using a PebbleTemplateEngine</h1>
-try <a href="routes">/routes</a> to see all available links
+<b>Текущий месяц: {{ month.date}}</b>

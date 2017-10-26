@@ -40,13 +40,6 @@ public class Main {
         loader.setPrefix("views/");
         loadData();
 
-        get("/hello", (request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            attributes.put("message", "Hello World!");
-
-            return new ModelAndView(attributes, "hello.pebble");
-        }, new PebbleTemplateEngine(loader));
-
         get("/load", (req, res) -> {
             loadData();
             System.out.println("Load done. Load " + monthHistories.size() + " elements");
@@ -57,6 +50,22 @@ public class Main {
             return monthHistories;
         }, gson::toJson);
 
+        /**
+         *  Pebble Template
+         */
+        get("/hello", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("message", "Hello World!");
+
+            return new ModelAndView(attributes, "hello.pebble");
+        }, new PebbleTemplateEngine(loader));
+
+        get("/recent-month", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("month", monthHistories.get(monthHistories.size()-1));
+
+            return new ModelAndView(attributes, "month.pebble");
+        }, new PebbleTemplateEngine(loader));
 
      /*   get("/income", (req,res) -> {
             if (monthHistories == null) loadData();
