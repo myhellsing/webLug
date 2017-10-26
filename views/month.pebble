@@ -1,6 +1,10 @@
-<h1>{{ message }}</h1>
-<b>Текущий месяц: {{ month.date}}</b></br>
-<b>Баланс на начало месяца: {{ month.balanceAtBegin}}</b></br>
-<b>Общая сумма трат: {{ month.getSummaryOutcome()}}</b></br>
-<b>Общий доход: {{ month.getSummaryIncome()}}</b></br>
-{% include "transactionOfMonth.pebble" %}
+{% extends "base.pebble" %}
+
+{% block content %}
+    <h1>{{ message }}</h1>
+    <b>Текущий месяц: {{ month.date}}</b></br>
+    <b>Баланс на начало месяца: {{ month.balanceAtBegin}}</b></br>
+    <b>Общая сумма трат: {{ month.getSummaryOutcome()}}</b></br>
+    <b>Общий доход: {{ month.getSummaryIncome()}}</b></br>
+    {% include "transactionOfMonth.pebble" %}
+{% endblock %}

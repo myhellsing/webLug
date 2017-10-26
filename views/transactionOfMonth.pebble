@@ -1,12 +1,16 @@
-<table>
+<table class="table table-striped ">
 <thead>
-<td width="300px">Название траты</td>
-<td width="100px">Сумма</td>
-<td width="100px">Категория</td>
+<tr>
+<th scope="col">#</th>
+<th scope="col">Название траты</th>
+<th scope="col">Сумма</th>
+<th scope="col">Категория</th>
+</tr>
 </thead>
 <tbody>
 {% for transaction in month.transactions %}
   <tr>
+  <th scope="row">{{loop.index+1}}</th>
   <td>{{transaction.name}}</td>
   <td>{{transaction.sum}}</td>
   <td>{{transaction.category.name}}</td>
