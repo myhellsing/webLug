@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import Transactions from './Transactions';
 
-  var trans = [   {"name":"аренда квартиры",
+
+/* sample data*
+ var trans = [   {"name":"аренда квартиры",
               "sum":31000.0,
               "category":{"name":"unknown","aliases":[]},
               "date":"Jan 2, 2013, 12:00:00 AM",
@@ -19,8 +21,38 @@ import Transactions from './Transactions';
               "sum":32.9,
               "category":{"name":"unknown","aliases":[]}}
               ]
+              /**/
 
+
+
+ //   var trans = $.getJson("http://localhost:4567/transactions");
+console.log("XMM")
+//console.log(trans);
 class App extends Component {
+  constructor() {
+     super();
+     
+     this.state = {
+        trans: []
+     }
+  }
+  componentDidMount() {
+  /**/
+   let trans = fetch("/transactions").then(res => res.json())
+     .then(
+       (res) => {
+
+          this.setState({trans: res[0].transactions});
+       },
+       // Note: it's important to handle errors here
+       // instead of a catch() block so that we don't swallow
+       // exceptions from actual bugs in components.
+       (error) => {
+              console.log("ERROR");
+       }
+     );
+     /**/
+  }
   render() {
     return (
       <div className="App">
@@ -33,7 +65,7 @@ class App extends Component {
         </p>
 
         <p>список трат тут будет</p>
-        <Transactions trans={trans}/>
+        <Transactions trans={this.state.trans}/>
       </div>
     );
   }

@@ -4,14 +4,15 @@ import Table from 'react-bootstrap/lib/Table';
 class Transactions extends Component {
   render() {
     return (
-
+  <div>
+  <p>Всего трат: {this.props.trans.length}</p>
   <Table striped bordered condensed hover>
     <thead>
       <tr>
-        <th>#___ {this.props.trans.length}</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Username</th>
+        <th>Название</th>
+        <th>Сумма</th>
+        <th>Категория</th>
+        <th>Тип</th>
       </tr>
     </thead>
     <tbody>
@@ -19,13 +20,14 @@ class Transactions extends Component {
      console.log(item.name)
      return <tr>
             <td>{item.name}</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <td>{item.sum}</td>
+            <td>{item.category.name}</td>
+            <td>{item.type}</td>
           </tr>
     })}
     </tbody>
   </Table>
+  </div>
     );
   }
 }
