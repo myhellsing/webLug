@@ -9,6 +9,7 @@ class Transactions extends Component {
   <Table striped bordered condensed hover>
     <thead>
       <tr>
+        <th>#</th>
         <th>Название</th>
         <th>Сумма</th>
         <th>Категория</th>
@@ -16,8 +17,9 @@ class Transactions extends Component {
       </tr>
     </thead>
     <tbody>
-    {this.props.trans.map(function(item){
+    {this.props.trans.map(function(item,i){
      return <tr>
+            <td>{i+1}</td>
             <td>{item.name}</td>
             <td>{item.sum}</td>
             <td>{item.category.name}</td>
