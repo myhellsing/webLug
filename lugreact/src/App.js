@@ -31,7 +31,6 @@ console.log("XMM")
 class App extends Component {
   constructor() {
      super();
-     
      this.state = {
         trans: []
      }
