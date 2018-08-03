@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Transactions from './Transactions';
+import { Button } from 'reactstrap';
 
 
 /* sample data*
@@ -32,6 +33,7 @@ class App extends Component {
   constructor() {
      super();
      this.state = {
+        month: 0,
         trans: []
      }
   }
@@ -40,18 +42,18 @@ class App extends Component {
    let trans = fetch("/transactions").then(res => res.json())
      .then(
        (res) => {
-
-          this.setState({trans: res[0].transactions});
+          console.log("iiii");
+          var i = this.month === undefined ? 0 : this.month;
+          this.setState({trans: res[i].transactions});
+          console.log(this.state.trans);
        },
-       // Note: it's important to handle errors here
-       // instead of a catch() block so that we don't swallow
-       // exceptions from actual bugs in components.
        (error) => {
               console.log("ERROR");
        }
      );
      /**/
   }
+
   render() {
     return (
       <div className="App">
@@ -62,6 +64,9 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload. Hello!
         </p>
+        <p>список месяцев для выбора</p>
+        <Button color="info" onClick={() => this.setState({month : 0}), console.log(this.state.month)} active ={this.state.month === 0}>Январь</Button>{' '}
+        <Button color="info" onClick={() => this.setState({month : 1}), console.log(this.state.month)} active ={this.state.month === 1}>Февраль</Button>{' '}
 
         <p>список трат тут будет</p>
         <Transactions trans={this.state.trans}/>
