@@ -33,18 +33,27 @@ class App extends Component {
   constructor() {
      super();
      this.state = {
+        year : 2017,
         month: 0,
-        trans: []
+        trans: null
      }
   }
+
   componentDidMount() {
   /**/
    let trans = fetch("/transactions").then(res => res.json())
      .then(
        (res) => {
           console.log("iiii");
-          this.setState({trans: res});
-          console.log(this.state.trans);
+          const byYear = res.reduce((acc, next) => {
+            const year = new Date(next.date).getUTCFullYear();
+               acc[year] = acc[year] || {};
+               const month =new Date(next.date).getUTCMonth();               ;
+               acc[year][month] = next;
+               return acc;
+          }, {})
+
+          this.setState({trans: byYear});
        },
        (error) => {
               console.log("ERROR");
@@ -68,7 +77,8 @@ class App extends Component {
         <Button color="info" onClick={() => { this.setState({month : 1}); console.log(this.state.month) }} active ={this.state.month === 1}>Февраль</Button>{' '}
 
         <p>список трат тут будет</p>
-        <Transactions trans={this.state.trans.length ? this.state.trans[this.state.month].transactions : []}/>
+
+        <Transactions trans={this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : []}/>
       </div>
     );
   }
