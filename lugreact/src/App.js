@@ -43,8 +43,7 @@ class App extends Component {
      .then(
        (res) => {
           console.log("iiii");
-          var i = this.month === undefined ? 0 : this.month;
-          this.setState({trans: res[i].transactions});
+          this.setState({trans: res});
           console.log(this.state.trans);
        },
        (error) => {
@@ -65,11 +64,11 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload. Hello!
         </p>
         <p>список месяцев для выбора</p>
-        <Button color="info" onClick={() => this.setState({month : 0}), console.log(this.state.month)} active ={this.state.month === 0}>Январь</Button>{' '}
-        <Button color="info" onClick={() => this.setState({month : 1}), console.log(this.state.month)} active ={this.state.month === 1}>Февраль</Button>{' '}
+        <Button color="info" onClick={() => { this.setState({month : 0}); console.log(this.state.month) }} active ={this.state.month === 0}>Январь</Button>{' '}
+        <Button color="info" onClick={() => { this.setState({month : 1}); console.log(this.state.month) }} active ={this.state.month === 1}>Февраль</Button>{' '}
 
         <p>список трат тут будет</p>
-        <Transactions trans={this.state.trans}/>
+        <Transactions trans={this.state.trans.length ? this.state.trans[this.state.month].transactions : []}/>
       </div>
     );
   }

@@ -18,7 +18,7 @@ class Transactions extends Component {
     </thead>
     <tbody>
     {this.props.trans.map(function(item,i){
-     return <tr>
+     return <tr key={i}>
             <td>{i+1}</td>
             <td>{item.name}</td>
             <td>{item.sum}</td>
