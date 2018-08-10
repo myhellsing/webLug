@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Transactions from './Transactions';
 import { Button } from 'reactstrap';
+import { ButtonToolbar } from 'reactstrap';
 
 
 /* sample data*
@@ -66,7 +67,7 @@ class App extends Component {
   }
 
   renderYearButton(item){
-   return (<Button color="info" onClick={() => { this.setState({year : item}) }}
+   return (<Button key={item} color="info" onClick={() => { this.setState({year : item}) }}
       active ={this.state.year === item}>{item}</Button>);
   }
 
@@ -80,9 +81,9 @@ class App extends Component {
         return res;
     }
 
-  renderMonthButton(i,item){
-   return (<Button color="info" onClick={() => { this.setState({month : i}) }}
-     active ={this.state.month === i}>{item}</Button>);
+  renderMonthButton(i,name){
+   return (<Button key={i} color="info" onClick={() => { this.setState({month : i}) }}
+     active ={this.state.month === i}>{name}</Button>);
   }
 
   render() {
@@ -97,10 +98,14 @@ class App extends Component {
         </p>
         <p>Выберите год</p>
         <div className="years-menu">
+          <ButtonToolbar>
           {this.getYears().map(item => this.renderYearButton(item))}
+          </ButtonToolbar>
         </div>
         <p>список месяцев для выбора</p>
+          <ButtonToolbar>
         { this.getMonths().map((item, i) => this.renderMonthButton(i, item))}
+          </ButtonToolbar>
         <p>список трат тут будет</p>
 
         <Transactions trans={this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : []}/>
