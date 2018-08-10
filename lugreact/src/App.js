@@ -27,8 +27,7 @@ import { Button } from 'reactstrap';
 
 
  //   var trans = $.getJson("http://localhost:4567/transactions");
-console.log("XMM")
-//console.log(trans);
+
 class App extends Component {
   constructor() {
      super();
@@ -44,7 +43,6 @@ class App extends Component {
    let trans = fetch("/transactions").then(res => res.json())
      .then(
        (res) => {
-          console.log("iiii");
           const byYear = res.reduce((acc, next) => {
             const year = new Date(next.date).getUTCFullYear();
                acc[year] = acc[year] || {};
@@ -62,6 +60,31 @@ class App extends Component {
      /**/
   }
 
+  getYears() {
+   var years = this.state.trans ? Object.keys(this.state.trans) : [this.state.year]
+    return years;
+  }
+
+  renderYearButton(item){
+   return (<Button color="info" onClick={() => { this.setState({year : item}) }}
+      active ={this.state.year === item}>{item}</Button>);
+  }
+
+    getMonths(){
+        const res = [];
+        const d = new Date();
+        for (let i=0;i<12;i++){
+            d.setMonth(i)
+            res.push(d.toLocaleDateString('ru',{month: 'long'}))
+        }
+        return res;
+    }
+
+  renderMonthButton(i,item){
+   return (<Button color="info" onClick={() => { this.setState({month : i}) }}
+     active ={this.state.month === i}>{item}</Button>);
+  }
+
   render() {
     return (
       <div className="App">
@@ -72,10 +95,12 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload. Hello!
         </p>
+        <p>Выберите год</p>
+        <div className="years-menu">
+          {this.getYears().map(item => this.renderYearButton(item))}
+        </div>
         <p>список месяцев для выбора</p>
-        <Button color="info" onClick={() => { this.setState({month : 0}); console.log(this.state.month) }} active ={this.state.month === 0}>Январь</Button>{' '}
-        <Button color="info" onClick={() => { this.setState({month : 1}); console.log(this.state.month) }} active ={this.state.month === 1}>Февраль</Button>{' '}
-
+        { this.getMonths().map((item, i) => this.renderMonthButton(i, item))}
         <p>список трат тут будет</p>
 
         <Transactions trans={this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : []}/>
