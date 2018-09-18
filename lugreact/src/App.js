@@ -35,7 +35,8 @@ class App extends Component {
      this.state = {
         year : 2017,
         month: 0,
-        trans: null
+        trans: null,
+        alltrans: false
      }
   }
 
@@ -93,9 +94,10 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload. Hello!
-        </p>
+        <div className="alltrans">
+          <Button key="all" color="info" onClick={() => { this.setState({alltrans : !this.state.alltrans}) }}
+              active ={this.state.alltrans}>За все время</Button>
+              </div>
         <p>Выберите год</p>
         <div className="years-menu">
           <ButtonToolbar>
