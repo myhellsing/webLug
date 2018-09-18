@@ -88,7 +88,20 @@ class App extends Component {
   }
 
   getTrans(){
-    return this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : [];
+   var transactions = [];
+    if (this.state.trans  ){
+        if (!this.state.alltrans){
+            return this.state.trans[this.state.year][this.state.month].transactions ;
+        }
+        Object.keys(this.state.trans).forEach((year) =>{
+             Object.keys(this.state.trans[year]).forEach((month)=>{
+
+                transactions = transactions.concat(this.state.trans[year][month].transactions);
+            });
+        });
+    }
+    console.log(transactions);
+    return transactions;
   }
 
 
