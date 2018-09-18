@@ -87,6 +87,11 @@ class App extends Component {
      active ={this.state.month === i}>{name}</Button>);
   }
 
+  getTrans(){
+    return this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : [];
+  }
+
+
   render() {
     return (
       <div className="App">
@@ -110,7 +115,7 @@ class App extends Component {
           </ButtonToolbar>
         <p>список трат тут будет</p>
 
-        <Transactions trans={this.state.trans ? this.state.trans[this.state.year][this.state.month].transactions : []}/>
+        <Transactions trans={this.getTrans()}/>
       </div>
     );
   }
